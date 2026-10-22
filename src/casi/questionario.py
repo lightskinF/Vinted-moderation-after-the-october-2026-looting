@@ -76,7 +76,7 @@ def annunci(caso: bool) -> list[dict]:
     ]
 
 
-CONSENSO = d("consenso", "Hai almeno 18 anni e acconsenti al trattamento dei dati descritto nell'informativa qui sopra?",
+CONSENSO = d("consenso", "Hai almeno 18 anni e acconsenti al trattamento dei dati descritto qui sopra?",
              "scelta", [("Sì, ho almeno 18 anni e acconsento", "si"), ("No", "no")])
 GRUPPO = d("gruppo", "Vinted ha mai preso un provvedimento sul tuo account o sui tuoi annunci?", "scelta",
            [("Sì", "caso"), ("No", "controllo")],

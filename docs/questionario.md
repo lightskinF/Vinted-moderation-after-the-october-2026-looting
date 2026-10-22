@@ -8,7 +8,7 @@ Percorso: chi risponde "No" al consenso finisce lì. Chi non ha mai ricevuto pro
 
 | Domanda | Tipo | Risposte → codice | Colonna |
 | --- | --- | --- | --- |
-| Hai almeno 18 anni e acconsenti al trattamento dei dati descritto nell'informativa qui sopra? | una risposta | Sì, ho almeno 18 anni e acconsento → `si`<br>No → `no` | `consenso` |
+| Hai almeno 18 anni e acconsenti al trattamento dei dati descritto qui sopra? | una risposta | Sì, ho almeno 18 anni e acconsento → `si`<br>No → `no` | `consenso` |
 
 ## Il tuo profilo
 
