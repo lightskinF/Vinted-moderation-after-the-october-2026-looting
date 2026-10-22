@@ -46,7 +46,7 @@ ID_FILE = re.compile(r"/download-file/(\d+)/")
 CONTEGGIO = re.compile(r'data-ecl-table-header="Statements of reasons"[^>]*>\s*([^<]*?)\s*<')
 ELENCO_SITO = DATI_RAW_TDB.parent / "tdb_elenco_sito.csv"  # fuori da data/raw/tdb: carica.py non lo legge come dato
 SHA1 = re.compile(r"\b[0-9a-fA-F]{40}\b")
-GB_PER_GIORNO = 0.2  # ZIP + CSV estratto + spazio per il database
+GB_PER_GIORNO = 0.03  # ZIP (circa 10 MB) + Parquet (circa 8 MB) + database (circa 7 MB)
 PAUSA = 0.5
 
 

@@ -79,7 +79,7 @@ def grafico(righe, percorso: Path) -> None:
         ax.plot(xs, ys, color=colore, linewidth=2, label=nome, solid_capstyle="round")
         ax.annotate(nome.split(" (")[0], (xs[-1], ys[-1]), xytext=(8, 0), textcoords="offset points",
                     va="center", fontsize=9, color=TESTO)
-    # Il caso di esempio del protocollo.
+    # Il caso di esempio mostrato nel grafico (p = 0,5%, r = 90%, s = 95%).
     p, r, s = 0.005, 0.90, 0.95
     y = onesti_tra_segnalati(p, r, s) * 100
     ax.plot([p * 100], [y], marker="o", markersize=8, color="#eb6834",

@@ -7,7 +7,8 @@ Legge cio' che trova in data/raw/tdb:
   - i file Parquet prodotti da dsa-tdb;
   - CSV sciolti, solo se non c'e' nessun Parquet (o con --anche-csv).
 Crea data/interim/vinted.duckdb con la tabella `sor`: una riga per provvedimento,
-campi ripuliti, duplicati tolti, solo Vinted, solo le date consentite.
+campi ripuliti, solo Vinted, solo le date consentite. Le righe con uuid ripetuto non si tolgono:
+si contano e il numero finisce nel rapporto di qualita'.
 
 Uso:  python src/tdb/carica.py            (aggiungi --anche-csv per unire Parquet e CSV)
       python src/tdb/carica.py --ricarica 2026-09-30 2026-10-02   rilegge dagli ZIP solo quei giorni
@@ -174,7 +175,7 @@ def controlla_intestazioni(csv: list[Path]) -> None:
             senza += 1
     if senza:
         print(f"  ATTENZIONE: {senza} file CSV controllati su {len(csv[::passo])} non hanno la riga delle "
-              "intestazioni. Le righe potrebbero essere lette male: scrivimelo.")
+              "intestazioni. Le righe potrebbero essere lette male: controlla i file prima di andare avanti.")
 
 
 def raccogli_file(anche_csv: bool, salta: set[dt.date]) -> tuple[list[Path], list[Path]]:
@@ -320,7 +321,7 @@ def main() -> None:
     print(f"  Righe Vinted nel database: {righe:,}".replace(",", "."))
     print(f"  Periodo (data di applicazione): {primo} - {ultimo}")
     if righe - distinti:
-        print(f"  ATTENZIONE: {righe - distinti:,} righe con uuid ripetuto. Scrivimelo.".replace(",", "."))
+        print(f"  ATTENZIONE: {righe - distinti:,} righe con uuid ripetuto (riportate nel rapporto di qualita').".replace(",", "."))
     if mancanti:
         print(f"  Campi assenti nei file nuovi: {', '.join(mancanti)}")
     if limite is not None:

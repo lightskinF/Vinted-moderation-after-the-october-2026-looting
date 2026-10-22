@@ -14,8 +14,8 @@ Lo studio non è collegato a Vinted.
 **Perché.** Studiare come Vinted applica blocchi e restrizioni e se ci sono errori.
 I risultati saranno pubblicati solo in forma aggregata e anonima.
 
-**Quali dati.** Solo quelli del modulo: tipo e anzianità dell'account, numero e tipo di annunci,
-date e testo della notifica di Vinted, esito di eventuali ricorsi, tipo di prove di acquisto.
+**Quali dati.** Solo quelli del modulo: paese, tipo e anzianità dell'account, numero e tipo di annunci,
+numero di vendite, categoria e fascia di marchi prevalenti, date e testo della notifica di Vinted, esito di eventuali ricorsi, tipo di prove di acquisto.
 Gli screenshot li oscuri tu prima di inviarli: nome utente, nome, indirizzo, email, IBAN,
 numeri d'ordine. Non chiediamo dati di altre persone né dati sensibili.
 

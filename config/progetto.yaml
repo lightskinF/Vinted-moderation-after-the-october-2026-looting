@@ -29,9 +29,9 @@ base_da: 2026-09-23
 # e si esclude (stessa regola per lo storico e per la finestra dell'evento).
 soglia_giorno_parziale: 0.6
 
-# Periodo da scaricare di default (in modalita' cieca la fine viene
-# comunque fermata al giorno prima dell'evento).
-download_da: 2026-08-01
+# Periodo da scaricare di default: lo storico usato per la preregistrazione (in modalita' cieca
+# la fine viene comunque fermata al giorno prima dell'evento).
+download_da: 2025-07-01
 download_a: 2026-10-16
 
 # Giorni in cui il numero dichiarato dal sito UE non coincide con le righe contenute nel suo stesso file.
