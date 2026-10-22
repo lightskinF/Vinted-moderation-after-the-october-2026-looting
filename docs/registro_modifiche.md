@@ -2,9 +2,9 @@
 
 Preregistrazione: https://osf.io/4grmp (OSF, modello Open-Ended, 22 ottobre 2026; DOI 10.17605/OSF.IO/4GRMP).
 
-Qui si elencano, con data e motivo, le deviazioni dal piano registrato, le precisazioni su come si applica e le imprecisioni note nei file allegati. Tutte le voci sono scritte prima di scaricare o analizzare i dati dal 17 ottobre 2026. Nessuna cambia ipotesi, statistiche, soglie o regole di decisione.
+Qui si elencano, con data e motivo, le deviazioni dal piano registrato, le precisazioni su come si applica e le imprecisioni note nei file allegati. Tutte le voci sono scritte prima di scaricare o analizzare i dati dal 17 ottobre 2026. Nessuna cambia ipotesi, soglie o regole di decisione già registrate. Le regole per H4 e H5 sono specificazioni analitiche aggiuntive, fissate prima di raccogliere risposte: completano il modello di H5 e la misura dell'effetto di H4, che la preregistrazione lasciava aperti.
 
-Lo stato completo del codice al momento della registrazione è il tag `prereg-v1` di questo repository. I tre file con impronta SHA-256 nella preregistrazione (`placebo.py`, `qualita.py`, `comune.py`) non sono cambiati. Dopo il tag sono cambiati solo commenti, messaggi a schermo, la stima dello spazio su disco e le date di download predefinite in `config/progetto.yaml`, `carica.py`, `scarica_diretto.py`, `scarica.py` e `tasso_base.py`, si è aggiunta una colonna al modello del foglio dei casi e si è aggiunto lo script dei casi (`src/casi/analisi_casi.py`); la storia dei commit mostra ogni riga modificata.
+Lo stato completo del codice al momento della registrazione è il tag `prereg-v1` di questo repository. I tre file con impronta SHA-256 nella preregistrazione (`placebo.py`, `qualita.py`, `comune.py`) non sono cambiati. Dopo il tag sono cambiati solo commenti, messaggi a schermo, la stima dello spazio su disco e le date di download predefinite in `config/progetto.yaml`, `carica.py`, `scarica_diretto.py`, `scarica.py` e `tasso_base.py`, si sono aggiunte due colonne al modello del foglio dei casi (`vendite_ultimi_3_mesi`, `ora_risposta`) e gli script dei casi (`src/casi/analisi_casi.py`, `src/casi/questionario.py`); la storia dei commit mostra ogni riga modificata.
 
 ## Deviazioni dal piano
 
@@ -20,7 +20,7 @@ Lo stato completo del codice al momento della registrazione è il tag `prereg-v1
 6. **Classificazione dei casi per le prove di robustezza** (sezione 9, punti 2 e 5). I criteri severo e largo sono definiti nel codebook (`docs/codebook_casi.md`, "Criteri per le prove di robustezza"): il severo coincide con "i soli errori documentati".
 7. **Rapporto di qualità rilanciato dopo l'evento.** Con i dati dal 17 ottobre caricati, la sezione 5 di `qualita_tdb.md` indica come fine della base l'ultimo giorno caricato. È solo testo descrittivo: la base usata dalle statistiche resta 23 settembre - 16 ottobre 2026, fissata in `placebo.py`.
 
-## Regole per H4 e H5, fissate prima di aprire il questionario (22 ottobre 2026)
+## Regole per H4 e H5: specificazioni aggiuntive, fissate prima di aprire il questionario (22 ottobre 2026)
 
 Il calcolo è in `src/casi/analisi_casi.py`, pubblicato prima di raccogliere qualsiasi risposta.
 
@@ -31,9 +31,10 @@ Il calcolo è in `src/casi/analisi_casi.py`, pubblicato prima di raccogliere qua
 5. **Casi in H5.** Solo i casi con provvedimento dal 17 ottobre 2026, perché i controlli sono attivi nello stesso periodo. Prova di robustezza: tutti i casi, anche precedenti.
 6. **Verdetto su H5**, solo se la numerosità registrata è raggiunta in entrambi i gruppi: sostenuta se l'intervallo al 95% dell'OR aggiustato sta tutto sopra 1; associazione in direzione opposta se sta tutto sotto 1; non sostenuta se comprende 1. Se il modello non è stimabile (per esempio per separazione perfetta) si riporta l'OR grezzo e H5 resta senza verdetto.
 7. **Numerosità.** Si usano i primi 30 controlli validi in ordine di data di raccolta (a parità di data, di codice), con gli stessi criteri di inclusione di H5: consenso, account privato, paese UE, almeno 10 vendite negli ultimi 3 mesi, raccolta entro il 31 gennaio 2027, quota calcolabile. `analisi_casi.py --numerosita` legge solo le righe dei controlli. Il numero si scrive in `config/progetto.yaml` e qui sotto, con la data; l'analisi dei casi non parte finché non c'è.
-8. **H4.** Casi con paese UE, data del provvedimento e quota calcolabile; "prima" vuol dire provvedimento entro il 16 ottobre 2026. Non si applicano i criteri di H5 su tipo di account e vendite. Come dimensione dell'effetto: spostamento di Hodges-Lehmann con intervallo al 95% e probabilità di superiorità.
+8. **H4.** Casi con paese UE, data del provvedimento e quota calcolabile; "prima" vuol dire provvedimento entro il 16 ottobre 2026. Non si applicano i criteri di H5 su tipo di account e vendite. Il test di Mann-Whitney registrato verifica uno spostamento della distribuzione verso quote più alte, non una differenza tra mediane in senso stretto: i risultati si descrivono così, con le mediane dei due gruppi. Come dimensione dell'effetto: spostamento di Hodges-Lehmann con intervallo al 95% (approssimazione normale, senza correzione per i valori pari) e probabilità di superiorità.
 9. **Documentazione incompleta** (sezione 9, punto 1): manca lo screenshot della notifica oppure non c'è nessuna prova di acquisto.
 10. **Accordo tra codificatori.** Kappa di Cohen semplice sulla classe finale, solo con almeno 10 casi classificati da due persone.
+11. **Questionario.** Le domande sono in `docs/questionario.md`, pubblicate prima di aprire il modulo. Un controllo è chi risponde di non aver mai ricevuto provvedimenti da Vinted. Chi ne ha ricevuti più di uno risponde sul più recente. Per i casi, anzianità, annunci, doppioni, annunci pubblicati e vendite si riferiscono al momento del provvedimento; per i controlli, al giorno della risposta. `notifica_disponibile` vale "si" solo quando lo screenshot della notifica arriva davvero.
 
 Numerosità fissata: *da completare con data e valore dopo i primi 30 controlli validi.*
 

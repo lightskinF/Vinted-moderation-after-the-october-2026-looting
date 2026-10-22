@@ -3,11 +3,13 @@
 Un **caso** è un account Vinted che ha ricevuto un provvedimento e accetta di raccontarlo con prove.
 Un **controllo** è un venditore privato attivo nello stesso periodo, senza provvedimenti,
 raccolto con lo stesso questionario e negli stessi canali. Servono entrambi: senza controlli
-non si può dire se una caratteristica aumenta il rischio di blocco.
+non si può dire se una caratteristica aumenta il rischio di un provvedimento.
 
 Il foglio si compila con le colonne di `src/casi/modello_casi.csv`. Il file compilato va in
-`data/casi/casi.csv` (fuori da GitHub) e si tiene cifrato. Lo analizza `src/casi/analisi_casi.py`,
-con le regole fissate in `docs/registro_modifiche.md` ("Regole per H4 e H5").
+`data/casi/casi.csv` (fuori da GitHub) e si tiene cifrato. Le domande del questionario sono in
+`docs/questionario.md`; `src/casi/questionario.py --converti` porta le risposte di Google Moduli nel foglio
+con questi codici. Lo analizza `src/casi/analisi_casi.py`, con le regole fissate in
+`docs/registro_modifiche.md` ("Regole per H4 e H5").
 
 ## Tre tipi di falso positivo
 
@@ -23,29 +25,32 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 
 ## Variabili
 
+**Data di riferimento** per le caratteristiche dell'account e degli annunci: per i casi il giorno del provvedimento (il più recente, se sono più di uno), per i controlli il giorno della risposta.
+
 | Colonna | Cosa contiene | Valori ammessi |
 | --- | --- | --- |
 | id_caso | Codice progressivo, mai il nome utente | C001... per i casi, K001... per i controlli |
 | gruppo | Caso o controllo | caso, controllo |
 | data_raccolta | Giorno in cui il questionario è arrivato | AAAA-MM-GG |
+| ora_risposta | Data e ora della risposta nel modulo: evita di importare due volte la stessa risposta | AAAA-MM-GG HH:MM:SS |
 | canale_raccolta | Da dove arriva | modulo, reddit, gruppo_facebook, altroconsumo, altro |
 | consenso | Consenso all'informativa | si (se no: non si registra nulla) |
 | paese | Paese del venditore, dichiarato | IT, FR, altro_UE, extra_UE |
 | tipo_account | | privato, pro |
-| anzianita_mesi | Mesi dall'apertura dell'account | numero |
-| annunci_attivi | Annunci visibili (per i casi: al momento del provvedimento) | numero |
+| anzianita_mesi | Mesi dall'apertura dell'account, alla data di riferimento | numero |
+| annunci_attivi | Annunci visibili alla data di riferimento | numero |
 | annunci_nuovi_cartellino | Di questi, quanti "Nuovo con cartellino" | numero |
 | quota_nuovi_cartellino | annunci_nuovi_cartellino / annunci_attivi | 0-1 |
 | articoli_duplicati | Annunci dello stesso articolo oltre il primo | numero |
-| pubblicati_ultimi_30_giorni | Annunci pubblicati nei 30 giorni precedenti | numero |
-| vendite_ultimi_3_mesi | Vendite concluse nei 3 mesi precedenti (criterio di inclusione: almeno 10) | numero |
+| pubblicati_ultimi_30_giorni | Annunci pubblicati nei 30 giorni prima della data di riferimento | numero |
+| vendite_ultimi_3_mesi | Vendite concluse nei 3 mesi prima della data di riferimento (criterio di inclusione: almeno 10) | numero |
 | categoria_prevalente | | abbigliamento, scarpe, borse_accessori, cosmetici, elettronica, altro |
 | fascia_marchi | | lusso, premium_streetwear, fast_fashion, misti |
 | data_provvedimento | Solo casi | AAAA-MM-GG |
 | tipo_provvedimento | Solo casi | rimozione_annuncio, limitazione_funzioni, sospensione_temporanea, blocco_definitivo, blocco_fondi |
 | motivazione_testo | Testo della notifica, senza dati personali | testo |
 | motivo_dichiarato | Il motivo scritto da Vinted | merce_rubata, attivita_commerciale, contraffazione, frode, altro, nessuno |
-| notifica_disponibile | Screenshot della notifica ufficiale | si, no |
+| notifica_disponibile | Screenshot della notifica ufficiale, ricevuto (se la persona lo promette ma non arriva: no) | si, no |
 | ricorso | Ricorso interno a Vinted | si, no |
 | data_ricorso, data_esito | | AAAA-MM-GG |
 | esito_ricorso | | revocato, confermato, nessuna_risposta, in_attesa |

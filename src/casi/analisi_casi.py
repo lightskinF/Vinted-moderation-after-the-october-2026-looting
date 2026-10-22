@@ -8,7 +8,8 @@ Due passi, in quest'ordine:
 
     python src/casi/analisi_casi.py --numerosita
         Legge SOLO i controlli e usa i primi 30 validi per fissare la numerosita' di H5.
-        Non legge nulla dei casi. Scrive reports/casi_numerosita.md.
+        Carica il foglio e scarta subito le righe dei casi: nessun loro valore e' usato o mostrato.
+        Scrive reports/casi_numerosita.md.
         Il numero si copia in config/progetto.yaml (h5_numerosita_per_gruppo) e si registra,
         con data, in docs/registro_modifiche.md, prima di lanciare il passo successivo.
 
@@ -25,6 +26,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -62,6 +64,16 @@ VALORI = {
     "motivo_dichiarato": {"merce_rubata", "attivita_commerciale", "contraffazione", "frode", "altro", "nessuno"},
     "notifica_disponibile": {"si", "no"},
     "esito_ricorso": {"revocato", "confermato", "nessuna_risposta", "in_attesa"},
+    "canale_raccolta": {"modulo", "reddit", "gruppo_facebook", "altroconsumo", "altro"},
+    "fascia_marchi": {"lusso", "premium_streetwear", "fast_fashion", "misti"},
+    "tipo_provvedimento": {"rimozione_annuncio", "limitazione_funzioni", "sospensione_temporanea", "blocco_definitivo",
+                           "blocco_fondi"},
+    "ricorso": {"si", "no"},
+    "adr": {"si", "no"},
+    "esito_adr": {"favorevole", "sfavorevole", "in_attesa"},
+    "richiesta_gdpr_utente": {"si", "no"},
+    "pertinenza_prove": {"contraddicono_il_motivo", "non_pertinenti", "insufficienti"},
+    "esito_istituzionale": {"errore_riconosciuto", "revocato_senza_spiegazione", "confermato", "pendente", "mai_contestato"},
     "classe_caso": {"errore_riconosciuto", "errore_documentato", "ripristino_senza_spiegazione",
                     "errore_plausibile", "indeterminato"},
 }
@@ -85,7 +97,7 @@ def leggi(percorso: Path, solo_controlli: bool) -> pd.DataFrame:
         sys.exit(f"Nel foglio mancano colonne del modello: {mancanti}")
     df = df.apply(lambda s: s.str.strip())
     if solo_controlli:
-        # Per la numerosita' si tengono solo i controlli: le righe dei casi non si leggono oltre questa riga.
+        # Per la numerosita' si tengono solo i controlli: le righe dei casi si scartano qui, prima di qualsiasi calcolo.
         df = df[df["gruppo"] == "controllo"].copy()
     for c in NUMERICHE:
         df[c] = pd.to_numeric(df[c].str.replace(",", ".", regex=False), errors="coerce")
@@ -112,6 +124,11 @@ def controlla(df: pd.DataFrame) -> list[str]:
         sbagliati = df[(df[col] != "") & ~df[col].isin(ammessi)]
         for _, r in sbagliati.iterrows():
             avvisi.append(f"{r['id_caso']}: {col} = '{r[col]}' non previsto dal codebook")
+    prove = {"scontrino", "ordine_online", "regalo_documentato", "foto_datate", "certificato", "nessuna"}
+    for _, r in df[df["prove_disponibili"] != ""].iterrows():
+        sbagliate = [p for p in re.split(r"[;,]\s*", r["prove_disponibili"]) if p and p not in prove]
+        if sbagliate:
+            avvisi.append(f"{r['id_caso']}: prove_disponibili contiene valori non previsti: {sbagliate}")
     doppi = df["id_caso"][df["id_caso"].duplicated()].unique()
     avvisi += [f"{i}: id_caso ripetuto" for i in doppi]
     q = df["annunci_nuovi_cartellino"] / df["annunci_attivi"]
@@ -205,7 +222,7 @@ def numerosita(percorso: Path) -> None:
     testo = (
         "# Numerosità di H5\n\n"
         f"Calcolata il {dt.date.today().isoformat()} sui primi {CONTROLLI_PILOTA} controlli validi, "
-        "senza leggere i casi (preregistrazione, sezione 7, punti 1-4).\n\n"
+        "senza usare né mostrare i dati dei casi (preregistrazione, sezione 7, punti 1-4).\n\n"
         f"- Controlli usati (in ordine di arrivo): {', '.join(pilota['id_caso'])}\n"
         f"- Esposti (almeno il {pct(SOGLIA_ESPOSTO, 0)} degli annunci nuovi con cartellino): {k} su {CONTROLLI_PILOTA}, "
         f"quota {pct(p0)}\n"
@@ -385,10 +402,12 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
         ("Criterio largo", casi[casi["classe_caso"].isin(CLASSI_LARGO)]),
     ]
     md.append("## H4. Quota cartellino nei casi, dal 17 ottobre contro prima\n\n"
-              f"Casi UE con data del provvedimento e quota calcolabile. Mann-Whitney a una coda (dal 17 ottobre più alta), "
+              f"Casi UE con data del provvedimento e quota calcolabile. Mann-Whitney a una coda: verifica se le quote dei casi "
+              f"dal 17 ottobre tendono a essere più alte (spostamento della distribuzione), non solo la mediana; "
               f"alfa {num(ALFA)}; solo descrittiva se un gruppo ha meno di {MIN_GRUPPO_H4} casi. Spostamento = stima di "
               "Hodges-Lehmann (mediana delle differenze tra tutte le coppie di casi), con intervallo al 95% a due code "
-              "(il test è a una coda: l'intervallo può comprendere 0 anche con p sotto 0,05); probabilità "
+              "calcolato con l'approssimazione normale senza correzione per i valori pari (il test è a una coda: l'intervallo "
+              "può comprendere 0 anche con p sotto 0,05); probabilità "
               "di superiorità = probabilità che un caso dal 17 ottobre abbia una quota più alta di un caso precedente "
               "(0,5 = nessuna differenza).\n\n")
     md.append("| Campione | Casi dal 17/10 | Casi prima | Mediana dal 17/10 (IQR) | Mediana prima (IQR) | "

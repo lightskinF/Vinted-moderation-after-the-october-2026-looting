@@ -1,7 +1,7 @@
 # VintedScope
 
 Studio indipendente e preregistrato sulla moderazione di Vinted dopo i saccheggi del 17-18 ottobre 2026 in Francia e a Milano.
-Misura come sono cambiati i provvedimenti di Vinted nell'UE usando le dichiarazioni di motivazione pubbliche del DSA Transparency Database (Vinted UAB), e studia con un questionario i casi di blocco e un gruppo di controllo.
+Misura come sono cambiati i provvedimenti di Vinted nell'UE usando le dichiarazioni di motivazione pubbliche del DSA Transparency Database (Vinted UAB), e studia con un questionario i casi di provvedimento (dalla rimozione di annunci al blocco dell'account) e un gruppo di controllo.
 Non ricostruisce l'algoritmo e non stima il tasso di errore dell'intera piattaforma. Non usa dati interni di Vinted.
 
 - **Preregistrazione (OSF):** https://osf.io/4grmp (DOI 10.17605/OSF.IO/4GRMP), registrata il 22 ottobre 2026
@@ -34,7 +34,8 @@ VintedScope/
 ├── docs/
 │   ├── preregistrazione.pdf / .md   piano registrato su OSF
 │   ├── registro_modifiche.md   modifiche e note successive alla registrazione
-│   └── codebook_casi.md        variabili e regole per i casi documentati
+│   ├── codebook_casi.md        variabili e regole per i casi documentati
+│   └── questionario.md         domande del questionario per casi e controlli
 ├── src/
 │   ├── comune.py           funzioni condivise
 │   ├── tdb/                scarica_diretto.py, carica.py, qualita.py (database UE);
@@ -42,6 +43,7 @@ VintedScope/
 │   ├── analisi/placebo.py  distribuzione placebo e test delle ipotesi
 │   ├── sim/tasso_base.py   simulazione del tasso base
 │   └── casi/               modello_casi.csv (intestazioni del foglio dei casi),
+│                           questionario.py (domande, modulo Google, conversione delle risposte),
 │                           analisi_casi.py (numerosità, H4, H5)
 ├── data/                   dati (non pubblicati)
 └── reports/                rapporti e grafici generati
@@ -83,8 +85,11 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
    `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
-6. **Casi e controlli** (foglio compilato in `data/casi/casi.csv`, vedi `docs/codebook_casi.md`):
-   `python src/casi/analisi_casi.py --numerosita` quando ci sono 30 controlli validi (legge solo i controlli); poi, registrata la numerosità, `python src/casi/analisi_casi.py`
+6. **Casi e controlli** (domande in `docs/questionario.md`, variabili in `docs/codebook_casi.md`):
+   - `python src/casi/questionario.py --modulo` scrive lo script che crea il modulo su Google Moduli;
+   - `python src/casi/questionario.py --converti risposte.csv` aggiunge le risposte nuove a `data/casi/casi.csv`;
+   - `python src/casi/analisi_casi.py --numerosita` quando ci sono 30 controlli validi (legge solo i controlli);
+   - registrata la numerosità, `python src/casi/analisi_casi.py`.
 
 Ogni esecuzione riscrive i file in `reports/`. Le versioni allegate alla preregistrazione restano su OSF e nel tag `prereg-v1` di questo repository.
 
