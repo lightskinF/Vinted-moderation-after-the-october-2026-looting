@@ -105,7 +105,7 @@ Fino alla preregistrazione, in `config/progetto.yaml` c'era `modalita_cieca: tru
 - Niente raccolta automatica massiva da Vinted.
 - Niente username o accuse a singoli nei materiali pubblicati.
 - Niente soglie operative ("sotto N articoli sei al sicuro") nei risultati.
-- `data/` non va mai su GitHub.
+- `data/` non va mai su GitHub. I rapporti dei casi (`reports/casi*.md`) nascono da dati dei partecipanti: sono esclusi da Git e si pubblicano a mano, a raccolta chiusa e dopo averli riletti.
 
 ## Licenza e citazione
 

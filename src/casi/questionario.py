@@ -30,7 +30,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from comune import RADICE, prepara_console  # noqa: E402
 
-TITOLO_MODULO = "Studio indipendente sulla moderazione di Vinted"
+TITOLO_MODULO = "VintedScope: audit black box dei sistemi antifrode di Vinted"
 CONFERMA = ("Grazie per aver partecipato. Le risposte si usano solo in forma aggregata e anonima. "
             "Se ti va, fai girare il questionario anche a chi vende su Vinted e non ha mai avuto problemi: "
             "senza di loro il confronto non si può fare.")
@@ -39,8 +39,13 @@ MODELLO = Path(__file__).with_name("modello_casi.csv")
 SI_NO = [("Sì", "si"), ("No", "no")]
 
 
-def d(colonna, titolo, tipo, scelte=None, obbligatoria=True, aiuto=""):
-    return dict(colonna=colonna, titolo=titolo, tipo=tipo, scelte=scelte or [], obbligatoria=obbligatoria, aiuto=aiuto)
+PAROLA = r"[A-Za-z0-9]{3,30}"       # parola di riferimento: solo lettere e cifre, niente simboli
+MAX_TESTO = 300                      # lunghezza massima di un testo libero tenuto nel foglio
+
+
+def d(colonna, titolo, tipo, scelte=None, obbligatoria=True, aiuto="", schema=None):
+    return dict(colonna=colonna, titolo=titolo, tipo=tipo, scelte=scelte or [], obbligatoria=obbligatoria, aiuto=aiuto,
+                schema=schema)
 
 
 def numero(colonna, titolo, aiuto=""):
@@ -49,6 +54,7 @@ def numero(colonna, titolo, aiuto=""):
 
 # Domande che dipendono dal momento: per i controlli si risponde pensando a oggi,
 # per i casi al momento del provvedimento (codebook). Titoli diversi, stessa colonna.
+# Solo le variabili che servono a H4, H5 e ai ricorsi: un questionario breve si compila fino in fondo.
 def annunci(caso: bool) -> list[dict]:
     if caso:
         return [
@@ -58,10 +64,8 @@ def annunci(caso: bool) -> list[dict]:
                    "Gli annunci visibili sul profilo, esclusi quelli già venduti. Una stima va bene."),
             numero("annunci_nuovi_cartellino", 'Quanti di quegli annunci erano nella condizione "Nuovo con cartellino"?',
                    "È la condizione che scegli quando pubblichi l'annuncio. Scrivi 0 se nessuno."),
-            numero("articoli_duplicati", "Quanti di quegli annunci erano doppioni dello stesso articolo?",
-                   "Conta solo le copie oltre la prima: 3 annunci dello stesso articolo = 2 doppioni. Scrivi 0 se nessuno."),
-            numero("pubblicati_ultimi_30_giorni", "Quanti annunci avevi pubblicato nei 30 giorni prima del provvedimento?"),
-            numero("vendite_ultimi_3_mesi", "Quante vendite avevi concluso nei 3 mesi prima del provvedimento?"),
+            numero("vendite_ultimi_3_mesi", "Quante vendite avevi concluso nei 3 mesi prima del provvedimento?",
+                   "Una stima va bene."),
         ]
     return [
         numero("anzianita_mesi", "Da quanti mesi hai l'account Vinted?", "Una stima va bene: 1 anno = 12 mesi."),
@@ -69,10 +73,7 @@ def annunci(caso: bool) -> list[dict]:
                "Gli annunci visibili sul profilo, esclusi quelli già venduti. Una stima va bene."),
         numero("annunci_nuovi_cartellino", 'Quanti di questi annunci sono nella condizione "Nuovo con cartellino"?',
                "È la condizione che scegli quando pubblichi l'annuncio. Scrivi 0 se nessuno."),
-        numero("articoli_duplicati", "Quanti di questi annunci sono doppioni dello stesso articolo?",
-               "Conta solo le copie oltre la prima: 3 annunci dello stesso articolo = 2 doppioni. Scrivi 0 se nessuno."),
-        numero("pubblicati_ultimi_30_giorni", "Quanti annunci hai pubblicato negli ultimi 30 giorni?"),
-        numero("vendite_ultimi_3_mesi", "Quante vendite hai concluso negli ultimi 3 mesi?"),
+        numero("vendite_ultimi_3_mesi", "Quante vendite hai concluso negli ultimi 3 mesi?", "Una stima va bene."),
     ]
 
 
@@ -96,14 +97,6 @@ PAGINE = [
         d("categoria_prevalente", "Che cosa vendi di più?", "scelta", [
             ("Abbigliamento", "abbigliamento"), ("Scarpe", "scarpe"), ("Borse e accessori", "borse_accessori"),
             ("Cosmetici e profumi", "cosmetici"), ("Elettronica", "elettronica"), ("Altro", "altro")]),
-        d("fascia_marchi", "Di che marchi sono soprattutto i tuoi articoli?", "scelta", [
-            ("Lusso (per esempio Gucci, Prada, Louis Vuitton)", "lusso"),
-            ("Premium o streetwear (per esempio Nike, Ralph Lauren, Stone Island)", "premium_streetwear"),
-            ("Fast fashion (per esempio Zara, H&M, Shein)", "fast_fashion"),
-            ("Misti", "misti")]),
-        d("canale_raccolta", "Dove hai trovato questo questionario?", "scelta", [
-            ("Reddit", "reddit"), ("Un gruppo Facebook", "gruppo_facebook"), ("Altroconsumo", "altroconsumo"),
-            ("Altro (passaparola, altri social, link diretto)", "altro")]),
         GRUPPO,
     ]),
     dict(id="controlli", titolo="I tuoi annunci oggi", aiuto="", fine=True, domande=annunci(caso=False)),
@@ -111,7 +104,9 @@ PAGINE = [
          aiuto="Se i provvedimenti sono più di uno, in tutto il questionario rispondi pensando al più recente.",
          domande=annunci(caso=True)),
     dict(id="provvedimento", titolo="Il provvedimento", aiuto="", domande=[
-        d("data_provvedimento", "In che giorno Vinted ha preso il provvedimento?", "data"),
+        d("periodo_provvedimento", "Quando Vinted ha preso il provvedimento?", "scelta", [
+            ("Prima del 17 ottobre 2026", "prima"), ("Dal 17 ottobre 2026 in poi", "dopo")],
+          aiuto="Il 17 ottobre 2026 è il giorno dei saccheggi."),
         d("tipo_provvedimento", "Che provvedimento era?", "scelta", [
             ("Rimozione di uno o più annunci", "rimozione_annuncio"),
             ("Limitazione di alcune funzioni", "limitazione_funzioni"),
@@ -126,30 +121,24 @@ PAGINE = [
             ("Frode, truffa o sicurezza dell'account", "frode"),
             ("Un altro motivo", "altro"),
             ("Nessun motivo", "nessuno")]),
-        d("motivazione_testo", "Copia qui il testo della notifica di Vinted", "paragrafo", obbligatoria=False,
-          aiuto="Togli nome utente, nome, email, numeri d'ordine e ogni altro dato personale."),
         d("notifica_disponibile", "Puoi inviare uno screenshot della notifica di Vinted, con i dati personali oscurati?",
-          "scelta", SI_NO),
+          "scelta", SI_NO, aiuto="Si invia per email, vedi l'ultima pagina."),
     ]),
-    dict(id="ricorsi", titolo="Ricorsi e richieste", aiuto="", domande=[
+    dict(id="ricorsi", titolo="Ricorsi", aiuto="", domande=[
         d("ricorso", "Hai chiesto a Vinted di rivedere il provvedimento (ricorso interno)?", "scelta", SI_NO,
           aiuto="Per esempio tramite l'assistenza o il modulo di reclamo."),
-        d("data_ricorso", "Se sì, in che giorno hai fatto il ricorso?", "data", obbligatoria=False),
         d("esito_ricorso", "Se sì, com'è andato il ricorso?", "scelta", [
             ("Il provvedimento è stato revocato", "revocato"),
             ("Il provvedimento è stato confermato", "confermato"),
             ("Nessuna risposta da più di un mese", "nessuna_risposta"),
             ("Aspetto una risposta da meno di un mese", "in_attesa")], obbligatoria=False),
-        d("data_esito", "Se Vinted ha risposto al ricorso, in che giorno?", "data", obbligatoria=False),
+        d("giorni_esito", "Se Vinted ha risposto, dopo quanti giorni circa?", "numero", obbligatoria=False,
+          aiuto="Una stima va bene: 1 settimana = 7 giorni."),
         d("adr", "Ti sei rivolto a un organismo di risoluzione extragiudiziale certificato (per esempio ADR Center)?",
           "scelta", SI_NO),
         d("esito_adr", "Se sì, com'è andata con l'organismo extragiudiziale?", "scelta", [
             ("A mio favore", "favorevole"), ("Contro di me", "sfavorevole"), ("In attesa", "in_attesa")],
           obbligatoria=False),
-        d("richiesta_gdpr_utente", "Hai chiesto a Vinted i tuoi dati personali con una richiesta di accesso (art. 15 GDPR)?",
-          "scelta", SI_NO),
-        d("risposta_gdpr", "Se Vinted ha risposto alla richiesta di accesso, che cosa dice sul motivo e su come è stata presa la decisione?",
-          "paragrafo", obbligatoria=False),
     ]),
     dict(id="prove", titolo="Prove di acquisto", aiuto="", domande=[
         d("prove_disponibili", "Quali prove hai sugli articoli contestati?", "caselle", [
@@ -157,10 +146,9 @@ PAGINE = [
             ("Prova che era un regalo", "regalo_documentato"), ("Foto con data precedente al provvedimento", "foto_datate"),
             ("Certificato di autenticità", "certificato"), ("Nessuna", "nessuna")],
           aiuto="Puoi sceglierne più di una. Non inviarle qui."),
-        d(None, "Parola di riferimento per l'email", "testo", obbligatoria=False,
-          aiuto="Se invii screenshot, inventa una parola (per esempio girasole42), scrivila qui e mettila nell'oggetto "
+        d(None, "Parola di riferimento per l'email", "testo", obbligatoria=False, schema=PAROLA,
+          aiuto="Solo se invii screenshot: inventa una parola (per esempio girasole42), scrivila qui e mettila nell'oggetto "
                 "dell'email con gli screenshot oscurati, all'indirizzo indicato nell'informativa."),
-        d("note", "Vuoi aggiungere qualcosa?", "paragrafo", obbligatoria=False),
     ]),
 ]
 DOMANDE = [q for p in PAGINE for q in p["domande"]]
@@ -267,6 +255,9 @@ def modulo() -> None:
                 riga += f".setChoiceValues({js([e for e, _ in q['scelte']])})"
             if q["tipo"] == "numero":
                 riga += ".setValidation(numero)"
+            if q["schema"]:
+                riga += (".setValidation(FormApp.createTextValidation().setHelpText('Da 3 a 30 tra lettere e cifre, senza spazi "
+                         "né simboli.').requireTextMatchesPattern(" + js("^" + q["schema"] + "$") + ").build())")
             if q["tipo"] == "data":
                 riga += ".setIncludesYear(true)"
             righe.append(riga + ";")
@@ -330,6 +321,22 @@ def giorno(testo_data: str) -> str:
     return o[:10] if o else "?" + t
 
 
+def pulisci(v: str, massimo: int = MAX_TESTO) -> str:
+    """Toglie i caratteri di controllo, riduce gli spazi e accorcia: quello che arriva dal modulo e' solo dato."""
+    v = re.sub(r"[\x00-\x1f\x7f]+", " ", v)
+    return re.sub(r"\s+", " ", v).strip()[:massimo]
+
+
+def neutralizza(v: str) -> str:
+    """Un testo che inizia con = + - @ sarebbe una formula se il CSV si apre in Excel o Fogli Google: si prefissa con '."""
+    return "'" + v if v[:1] in ("=", "+", "-", "@") else v
+
+
+def breve(v: str, massimo: int = 40) -> str:
+    """Per i messaggi a schermo: nessun testo libero intero."""
+    return re.sub(r"[^\w .,'-]", "?", v)[:massimo]
+
+
 def converti(percorso: Path) -> None:
     risposte = pd.read_csv(percorso, dtype=str, keep_default_na=False)
     colonne = list(pd.read_csv(MODELLO, nrows=0).columns)
@@ -366,16 +373,22 @@ def converti(percorso: Path) -> None:
         riferimento = ""
         for col_csv in presenti:
             q = per_titolo[col_csv.strip()]
-            v = r[col_csv].strip()
+            v = pulisci(r[col_csv])
             if not v:
                 continue
             if q["colonna"] is None:
+                if not re.fullmatch(PAROLA, v):
+                    avvisi.append(f"Risposta {o}: parola di riferimento non valida, scartata ({breve(v)})")
+                    continue
                 riferimento = v
+                continue
+            if q["tipo"] == "numero" and not re.fullmatch(r"\d{1,6}", v):
+                avvisi.append(f"Risposta {o}: numero non valido in \"{q['titolo']}\", lasciato vuoto ({breve(v)})")
                 continue
             if q["tipo"] == "scelta":
                 codice = dict(q["scelte"]).get(v)
                 if codice is None:
-                    avvisi.append(f"Risposta {o}: '{v}' non è tra le scelte di \"{q['titolo']}\"")
+                    avvisi.append(f"Risposta {o}: '{breve(v)}' non è tra le scelte di \"{q['titolo']}\"")
                     continue
                 v = codice
             elif q["tipo"] == "caselle":
@@ -383,12 +396,13 @@ def converti(percorso: Path) -> None:
                 parti = [p.strip() for p in v.split(", ")]
                 sbagliate = [p for p in parti if p not in mappa]
                 if sbagliate:
-                    avvisi.append(f"Risposta {o}: scelte non riconosciute in \"{q['titolo']}\": {sbagliate}")
+                    avvisi.append(f"Risposta {o}: scelte non riconosciute in \"{q['titolo']}\": "
+                                  f"{[breve(x) for x in sbagliate]}")
                 v = "; ".join(mappa[p] for p in parti if p in mappa)
             elif q["tipo"] == "data":
                 v = giorno(v)
                 if v.startswith("?"):
-                    avvisi.append(f"Risposta {o}: data non leggibile in \"{q['titolo']}\": {v[1:]}")
+                    avvisi.append(f"Risposta {o}: data non leggibile in \"{q['titolo']}\": {breve(v[1:])}")
                     v = ""
             if riga[q["colonna"]] and riga[q["colonna"]] != v:
                 avvisi.append(f"Risposta {o}: due valori per {q['colonna']}")
@@ -414,7 +428,7 @@ def converti(percorso: Path) -> None:
         if riferimento:
             promemoria.append(f"riferimento email: {riferimento}")
         riga["note"] = " | ".join(promemoria + ([riga["note"]] if riga["note"] else []))
-        nuove.append(riga)
+        nuove.append({k: neutralizza(x) for k, x in riga.items()})
 
     tutto = pd.concat([esistente[colonne], pd.DataFrame(nuove, columns=colonne)], ignore_index=True)
     FOGLIO.parent.mkdir(parents=True, exist_ok=True)

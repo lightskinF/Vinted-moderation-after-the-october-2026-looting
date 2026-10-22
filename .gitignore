@@ -11,6 +11,10 @@ docs/lettere/
 docs/privacy.md
 docs/preregistrazione_testo_osf.txt
 
+# Rapporti dei casi: generati da dati personali dei partecipanti, si pubblicano a mano a raccolta chiusa
+# (git add -f reports/casi.md), dopo aver controllato che non contengano nulla che identifichi qualcuno
+reports/casi*.md
+
 # Ambiente Python
 .venv/
 __pycache__/

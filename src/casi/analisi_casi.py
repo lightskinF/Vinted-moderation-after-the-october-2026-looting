@@ -61,6 +61,7 @@ VALORI = {
     "paese": {"IT", "FR", "altro_UE", "extra_UE"},
     "tipo_account": {"privato", "pro"},
     "categoria_prevalente": {"abbigliamento", "scarpe", "borse_accessori", "cosmetici", "elettronica", "altro"},
+    "periodo_provvedimento": {"prima", "dopo"},
     "motivo_dichiarato": {"merce_rubata", "attivita_commerciale", "contraffazione", "frode", "altro", "nessuno"},
     "notifica_disponibile": {"si", "no"},
     "esito_ricorso": {"revocato", "confermato", "nessuna_risposta", "in_attesa"},
@@ -80,7 +81,7 @@ VALORI = {
 CLASSI_SEVERO = {"errore_riconosciuto", "errore_documentato"}
 CLASSI_LARGO = CLASSI_SEVERO | {"ripristino_senza_spiegazione", "errore_plausibile"}
 NUMERICHE = ["anzianita_mesi", "annunci_attivi", "annunci_nuovi_cartellino", "quota_nuovi_cartellino",
-             "vendite_ultimi_3_mesi"]
+             "vendite_ultimi_3_mesi", "giorni_esito"]
 DATE = ["data_raccolta", "data_provvedimento", "data_ricorso", "data_esito"]
 
 
@@ -115,6 +116,11 @@ def e_data(d) -> bool:
     return isinstance(d, dt.date)
 
 
+def breve(v: str, massimo: int = 40) -> str:
+    """Nei rapporti non finisce mai un testo libero intero: solo i primi caratteri, senza simboli."""
+    return re.sub(r"[^\w .,'-]", "?", str(v))[:massimo]
+
+
 def controlla(df: pd.DataFrame) -> list[str]:
     """Valori fuori dal codebook e incoerenze. Non cambia i dati: elenca i problemi da correggere a mano."""
     avvisi = []
@@ -123,12 +129,13 @@ def controlla(df: pd.DataFrame) -> list[str]:
             continue
         sbagliati = df[(df[col] != "") & ~df[col].isin(ammessi)]
         for _, r in sbagliati.iterrows():
-            avvisi.append(f"{r['id_caso']}: {col} = '{r[col]}' non previsto dal codebook")
+            avvisi.append(f"{breve(r['id_caso'], 12)}: {col} = '{breve(r[col])}' non previsto dal codebook")
     prove = {"scontrino", "ordine_online", "regalo_documentato", "foto_datate", "certificato", "nessuna"}
     for _, r in df[df["prove_disponibili"] != ""].iterrows():
         sbagliate = [p for p in re.split(r"[;,]\s*", r["prove_disponibili"]) if p and p not in prove]
         if sbagliate:
-            avvisi.append(f"{r['id_caso']}: prove_disponibili contiene valori non previsti: {sbagliate}")
+            avvisi.append(f"{breve(r['id_caso'], 12)}: prove_disponibili contiene valori non previsti: "
+                          f"{[breve(x, 25) for x in sbagliate]}")
     doppi = df["id_caso"][df["id_caso"].duplicated()].unique()
     avvisi += [f"{i}: id_caso ripetuto" for i in doppi]
     q = df["annunci_nuovi_cartellino"] / df["annunci_attivi"]
@@ -139,8 +146,10 @@ def controlla(df: pd.DataFrame) -> list[str]:
     troppi = df["annunci_nuovi_cartellino"] > df["annunci_attivi"]
     avvisi += [f"{i}: più annunci con cartellino che annunci attivi (quota non calcolabile)"
                for i in df.loc[troppi, "id_caso"]]
-    senza_data = (df["gruppo"] == "caso") & df["data_provvedimento"].isna()
-    avvisi += [f"{i}: caso senza data_provvedimento valida (escluso da H4 e H5)" for i in df.loc[senza_data, "id_caso"]]
+    senza_data = ((df["gruppo"] == "caso") & df["data_provvedimento"].isna()
+                  & ~df["periodo_provvedimento"].isin(["prima", "dopo"]))
+    avvisi += [f"{i}: caso senza periodo_provvedimento né data_provvedimento valida (escluso da H4 e H5)"
+               for i in df.loc[senza_data, "id_caso"]]
     if "classe_caso" in df:
         casi = df[df["gruppo"] == "caso"]
         regola = casi["esito_istituzionale"].eq("errore_riconosciuto") & casi["classe_caso"].ne("errore_riconosciuto")
@@ -380,7 +389,11 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
     tutte = leggi(percorso, solo_controlli=False)
     avvisi = controlla(tutte)
     tutte["quota"] = quota_valida(tutte)
-    tutte["dopo"] = tutte["data_provvedimento"].map(lambda d: e_data(d) and d >= DATA_EVENTO)
+    # Periodo del provvedimento: la data esatta, se c'e', altrimenti la risposta "prima / dal 17 ottobre" del modulo.
+    ha_data = tutte["data_provvedimento"].map(e_data)
+    tutte["ha_periodo"] = ha_data | tutte["periodo_provvedimento"].isin(["prima", "dopo"])
+    tutte["dopo"] = [(d >= DATA_EVENTO) if e_data(d) else (p == "dopo")
+                     for d, p in zip(tutte["data_provvedimento"], tutte["periodo_provvedimento"])]
     tutte["doc_completa"] = (tutte["notifica_disponibile"].eq("si") & tutte["prove_disponibili"].ne("")
                              & tutte["prove_disponibili"].ne("nessuna"))
     df = tutte[tutte["consenso"] == "si"].copy()
@@ -394,7 +407,7 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
 
     # ---- H4
     casi = df[(df["gruppo"] == "caso") & df["paese"].isin(PAESI_UE) & df["quota"].notna()
-              & df["data_provvedimento"].map(e_data)].copy()
+              & df["ha_periodo"]].copy()
     scenari_h4 = [
         ("Principale: tutti i casi UE", casi),
         ("Senza documentazione incompleta", casi[casi["doc_completa"]]),
@@ -492,8 +505,9 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
         ric = tutti[tutti["ricorso"] == "si"].copy()
         md.append(f"\n## Ricorsi interni (descrittiva, {len(ric)} casi)\n\n")
         if len(ric):
-            ric["giorni"] = [(e - r).days if e_data(e) and e_data(r) else np.nan
-                             for e, r in zip(ric["data_esito"], ric["data_ricorso"])]
+            # Giorni fino all'esito: la risposta del modulo, oppure la differenza tra le due date se compilate a mano.
+            ric["giorni"] = [g if pd.notna(g) else ((e - r).days if e_data(e) and e_data(r) else np.nan)
+                             for g, e, r in zip(ric["giorni_esito"], ric["data_esito"], ric["data_ricorso"])]
             md.append("| Esito | Casi | Giorni fino all'esito (mediana) |\n| --- | --- | --- |\n")
             for esito_r, g in ric.groupby(ric["esito_ricorso"].replace("", "non indicato")):
                 gg = g["giorni"].dropna()

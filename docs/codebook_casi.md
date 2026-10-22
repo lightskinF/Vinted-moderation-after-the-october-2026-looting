@@ -33,7 +33,7 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | gruppo | Caso o controllo | caso, controllo |
 | data_raccolta | Giorno in cui il questionario è arrivato | AAAA-MM-GG |
 | ora_risposta | Data e ora della risposta nel modulo: evita di importare due volte la stessa risposta | AAAA-MM-GG HH:MM:SS |
-| canale_raccolta | Da dove arriva | modulo, reddit, gruppo_facebook, altroconsumo, altro |
+| canale_raccolta | Da dove arriva. Non è nel questionario: si compila a mano se si usano link diversi per canale | modulo, reddit, gruppo_facebook, altroconsumo, altro |
 | consenso | Consenso all'informativa | si (se no: non si registra nulla) |
 | paese | Paese del venditore, dichiarato | IT, FR, altro_UE, extra_UE |
 | tipo_account | | privato, pro |
@@ -41,23 +41,25 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | annunci_attivi | Annunci visibili alla data di riferimento | numero |
 | annunci_nuovi_cartellino | Di questi, quanti "Nuovo con cartellino" | numero |
 | quota_nuovi_cartellino | annunci_nuovi_cartellino / annunci_attivi | 0-1 |
-| articoli_duplicati | Annunci dello stesso articolo oltre il primo | numero |
-| pubblicati_ultimi_30_giorni | Annunci pubblicati nei 30 giorni prima della data di riferimento | numero |
+| articoli_duplicati | Non è nel questionario; solo se ricavato da altro materiale. Annunci dello stesso articolo oltre il primo | numero |
+| pubblicati_ultimi_30_giorni | Non è nel questionario; solo se ricavato da altro materiale. Annunci pubblicati nei 30 giorni prima della data di riferimento | numero |
 | vendite_ultimi_3_mesi | Vendite concluse nei 3 mesi prima della data di riferimento (criterio di inclusione: almeno 10) | numero |
 | categoria_prevalente | | abbigliamento, scarpe, borse_accessori, cosmetici, elettronica, altro |
-| fascia_marchi | | lusso, premium_streetwear, fast_fashion, misti |
-| data_provvedimento | Solo casi | AAAA-MM-GG |
+| fascia_marchi | Non è nel questionario (non entra nelle analisi registrate); si compila solo se la si ricava da altro materiale | lusso, premium_streetwear, fast_fashion, misti |
+| data_provvedimento | Solo casi, se nota (non è nel questionario: si ricava da screenshot o email) | AAAA-MM-GG |
+| periodo_provvedimento | Solo casi: provvedimento prima del 17 ottobre 2026 o dal 17 ottobre in poi. Se c'è data_provvedimento, vale la data | prima, dopo |
 | tipo_provvedimento | Solo casi | rimozione_annuncio, limitazione_funzioni, sospensione_temporanea, blocco_definitivo, blocco_fondi |
-| motivazione_testo | Testo della notifica, senza dati personali | testo |
+| motivazione_testo | Testo della notifica, senza dati personali. Non è nel questionario: si ricava dallo screenshot | testo |
 | motivo_dichiarato | Il motivo scritto da Vinted | merce_rubata, attivita_commerciale, contraffazione, frode, altro, nessuno |
 | notifica_disponibile | Screenshot della notifica ufficiale, ricevuto (se la persona lo promette ma non arriva: no) | si, no |
 | ricorso | Ricorso interno a Vinted | si, no |
-| data_ricorso, data_esito | | AAAA-MM-GG |
+| data_ricorso, data_esito | Solo se note (non sono nel questionario) | AAAA-MM-GG |
+| giorni_esito | Giorni tra ricorso e risposta di Vinted, stimati da chi risponde; se mancano si usano le due date | numero |
 | esito_ricorso | | revocato, confermato, nessuna_risposta, in_attesa |
 | adr | Ricorso a un organismo extragiudiziale certificato (es. ADR Center) | si, no |
 | esito_adr | | favorevole, sfavorevole, in_attesa |
-| richiesta_gdpr_utente | Richiesta ex art. 15 GDPR inviata dall'utente stesso | si, no |
-| risposta_gdpr | Sintesi della risposta ricevuta e condivisa dall'utente | testo |
+| richiesta_gdpr_utente | Richiesta ex art. 15 GDPR inviata dall'utente stesso. Non è nel questionario | si, no |
+| risposta_gdpr | Sintesi della risposta ricevuta e condivisa dall'utente. Non è nel questionario | testo |
 | prove_disponibili | | scontrino, ordine_online, regalo_documentato, foto_datate, certificato, nessuna (anche più di una) |
 | pertinenza_prove | Asse B, vedi sotto | contraddicono_il_motivo, non_pertinenti, insufficienti |
 | esito_istituzionale | Asse A, vedi sotto | errore_riconosciuto, revocato_senza_spiegazione, confermato, pendente, mai_contestato |
