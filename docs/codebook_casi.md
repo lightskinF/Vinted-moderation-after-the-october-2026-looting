@@ -82,6 +82,13 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | errore_plausibile | Elementi favorevoli, ma non sufficienti per le classi sopra |
 | indeterminato | Tutti gli altri casi |
 
+Si applica la prima regola valida, dall'alto in basso: un caso con errore riconosciuto e prove che contraddicono il motivo è `errore_riconosciuto`.
+
+**Criteri per le prove di robustezza** (sezione 9 della preregistrazione).
+- Criterio severo, che coincide con "i soli errori documentati": classi `errore_riconosciuto` ed `errore_documentato`.
+- Criterio largo: in più `ripristino_senza_spiegazione` ed `errore_plausibile`.
+- `indeterminato` non entra in nessuno dei due.
+
 ## Codifica cieca
 
 **Caratteristiche degli annunci** (quota cartellino, duplicati, numero di annunci): le compila chi risponde al questionario, uguale per casi e controlli, quindi non c'è codifica manuale. Se una persona le ricava da screenshot per verifica, lavora su file con codice casuale, senza gruppo (nei limiti del possibile).

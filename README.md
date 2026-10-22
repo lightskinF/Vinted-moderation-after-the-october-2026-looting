@@ -73,12 +73,17 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
    `python src/tdb/scarica_diretto.py --da 2026-10-17 --a 2026-11-01`
 
    Il 1 novembre serve perché alcune decisioni arrivano al database il giorno dopo: senza quel file la finestra 17-31 ottobre resterebbe incompleta.
+
+   Da dicembre, per il periodo "Dopo" (solo descrittivo) e per il controllo dei cambi strutturali fino al 30 novembre:
+   `python src/tdb/scarica_diretto.py --da 2026-11-02 --a 2026-12-01`
 3. **Caricamento e qualità**: converte ogni ZIP in Parquet senza estrarre i CSV e produce `reports/qualita_tdb.md` con i grafici.
    `python src/tdb/carica.py` e poi `python src/tdb/qualita.py`
-4. **Analisi preregistrata** (distribuzione placebo e, dopo il 2 novembre, l'evento):
+4. **Analisi preregistrata** (distribuzione placebo e, dal 2 novembre, l'evento):
    `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
+
+Ogni esecuzione riscrive i file in `reports/`. Le versioni allegate alla preregistrazione restano su OSF e nel tag `prereg-v1` di questo repository.
 
 Piano B se `scarica_diretto.py` non funziona: scarica a mano i file **full** (non light) di Vinted UAB da https://transparency.dsa.ec.europa.eu/explore-data/download, mettili in `data/raw/tdb/manuale/` e lancia `python src/tdb/carica.py`.
 

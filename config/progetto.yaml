@@ -39,5 +39,5 @@ download_a: 2026-10-16
 # e' il numero scritto nell'elenco del sito a essere diverso. Il rapporto li elenca ma non li conta come errori.
 giorni_sito_incoerenti: [2026-05-08, 2026-09-30, 2026-10-01, 2026-10-02]
 
-# full = tutti i campi (paese e motivazioni compresi). Non usare light.
+# full = tutti i campi, comprese le motivazioni scritte (decision_facts). Non usare light.
 versione: full
