@@ -41,7 +41,8 @@ VintedScope/
 │   │                       scarica.py è la vecchia versione con dsa-tdb, non usata
 │   ├── analisi/placebo.py  distribuzione placebo e test delle ipotesi
 │   ├── sim/tasso_base.py   simulazione del tasso base
-│   └── casi/modello_casi.csv   intestazioni del foglio dei casi
+│   └── casi/               modello_casi.csv (intestazioni del foglio dei casi),
+│                           analisi_casi.py (numerosità, H4, H5)
 ├── data/                   dati (non pubblicati)
 └── reports/                rapporti e grafici generati
 ```
@@ -82,6 +83,8 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
    `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
+6. **Casi e controlli** (foglio compilato in `data/casi/casi.csv`, vedi `docs/codebook_casi.md`):
+   `python src/casi/analisi_casi.py --numerosita` quando ci sono 30 controlli validi (legge solo i controlli); poi, registrata la numerosità, `python src/casi/analisi_casi.py`
 
 Ogni esecuzione riscrive i file in `reports/`. Le versioni allegate alla preregistrazione restano su OSF e nel tag `prereg-v1` di questo repository.
 

@@ -4,7 +4,7 @@ Preregistrazione: https://osf.io/4grmp (OSF, modello Open-Ended, 22 ottobre 2026
 
 Qui si elencano, con data e motivo, le deviazioni dal piano registrato, le precisazioni su come si applica e le imprecisioni note nei file allegati. Tutte le voci sono scritte prima di scaricare o analizzare i dati dal 17 ottobre 2026. Nessuna cambia ipotesi, statistiche, soglie o regole di decisione.
 
-Lo stato completo del codice al momento della registrazione è il tag `prereg-v1` di questo repository. I tre file con impronta SHA-256 nella preregistrazione (`placebo.py`, `qualita.py`, `comune.py`) non sono cambiati. Dopo il tag sono cambiati solo commenti, messaggi a schermo, la stima dello spazio su disco e le date di download predefinite in `config/progetto.yaml`, `carica.py`, `scarica_diretto.py`, `scarica.py` e `tasso_base.py`, e si è aggiunta una colonna al modello del foglio dei casi; la storia dei commit mostra ogni riga modificata.
+Lo stato completo del codice al momento della registrazione è il tag `prereg-v1` di questo repository. I tre file con impronta SHA-256 nella preregistrazione (`placebo.py`, `qualita.py`, `comune.py`) non sono cambiati. Dopo il tag sono cambiati solo commenti, messaggi a schermo, la stima dello spazio su disco e le date di download predefinite in `config/progetto.yaml`, `carica.py`, `scarica_diretto.py`, `scarica.py` e `tasso_base.py`, si è aggiunta una colonna al modello del foglio dei casi e si è aggiunto lo script dei casi (`src/casi/analisi_casi.py`); la storia dei commit mostra ogni riga modificata.
 
 ## Deviazioni dal piano
 
@@ -20,14 +20,22 @@ Lo stato completo del codice al momento della registrazione è il tag `prereg-v1
 6. **Classificazione dei casi per le prove di robustezza** (sezione 9, punti 2 e 5). I criteri severo e largo sono definiti nel codebook (`docs/codebook_casi.md`, "Criteri per le prove di robustezza"): il severo coincide con "i soli errori documentati".
 7. **Rapporto di qualità rilanciato dopo l'evento.** Con i dati dal 17 ottobre caricati, la sezione 5 di `qualita_tdb.md` indica come fine della base l'ultimo giorno caricato. È solo testo descrittivo: la base usata dalle statistiche resta 23 settembre - 16 ottobre 2026, fissata in `placebo.py`.
 
-## Da fissare prima di aprire il questionario (H5)
+## Regole per H4 e H5, fissate prima di aprire il questionario (22 ottobre 2026)
 
-Si registrano qui, con data, prima di raccogliere risposte:
+Il calcolo è in `src/casi/analisi_casi.py`, pubblicato prima di raccogliere qualsiasi risposta.
 
-- la soglia di "quota cartellino alta" che definisce gli esposti;
-- se nel modello logistico la quota entra in forma dicotomica (come nel calcolo della numerosità) o continua.
+1. **Quota cartellino.** Annunci "nuovo con cartellino" diviso annunci attivi, calcolata dallo script con i due numeri dati da chi risponde. Non è calcolabile, e la risposta esce da H4 e H5, se gli annunci attivi sono 0 o mancano o se i nuovi con cartellino sono più degli attivi.
+2. **Esposti (H5).** Quota cartellino almeno del 50%: la maggioranza degli annunci è nuova con cartellino.
+3. **Forma della quota nel modello.** Principale dicotomica (esposto sì/no), come nel calcolo della numerosità: il verdetto su H5 si dà solo su questa. Secondaria la quota come numero (OR per 10 punti di quota), senza verdetto.
+4. **Covariate.** Numero di annunci attivi in logaritmo, anzianità in anni, categoria prevalente con riferimento "abbigliamento"; le categorie con meno di 10 risposte nel campione di H5 si uniscono ad "altro". Intervalli di confidenza di Wald al 95%. Si riporta anche l'OR grezzo della tabella 2x2.
+5. **Casi in H5.** Solo i casi con provvedimento dal 17 ottobre 2026, perché i controlli sono attivi nello stesso periodo. Prova di robustezza: tutti i casi, anche precedenti.
+6. **Verdetto su H5**, solo se la numerosità registrata è raggiunta in entrambi i gruppi: sostenuta se l'intervallo al 95% dell'OR aggiustato sta tutto sopra 1; associazione in direzione opposta se sta tutto sotto 1; non sostenuta se comprende 1. Se il modello non è stimabile (per esempio per separazione perfetta) si riporta l'OR grezzo e H5 resta senza verdetto.
+7. **Numerosità.** Si usano i primi 30 controlli validi in ordine di data di raccolta (a parità di data, di codice), con gli stessi criteri di inclusione di H5: consenso, account privato, paese UE, almeno 10 vendite negli ultimi 3 mesi, raccolta entro il 31 gennaio 2027, quota calcolabile. `analisi_casi.py --numerosita` legge solo le righe dei controlli. Il numero si scrive in `config/progetto.yaml` e qui sotto, con la data; l'analisi dei casi non parte finché non c'è.
+8. **H4.** Casi con paese UE, data del provvedimento e quota calcolabile; "prima" vuol dire provvedimento entro il 16 ottobre 2026. Non si applicano i criteri di H5 su tipo di account e vendite. Come dimensione dell'effetto: spostamento di Hodges-Lehmann con intervallo al 95% e probabilità di superiorità.
+9. **Documentazione incompleta** (sezione 9, punto 1): manca lo screenshot della notifica oppure non c'è nessuna prova di acquisto.
+10. **Accordo tra codificatori.** Kappa di Cohen semplice sulla classe finale, solo con almeno 10 casi classificati da due persone.
 
-Gli script per H4 e H5 si scrivono e si pubblicano prima di guardare i casi.
+Numerosità fissata: *da completare con data e valore dopo i primi 30 controlli validi.*
 
 ## Imprecisioni note nei file allegati (22 ottobre 2026)
 

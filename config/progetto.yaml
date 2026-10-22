@@ -41,3 +41,8 @@ giorni_sito_incoerenti: [2026-05-08, 2026-09-30, 2026-10-01, 2026-10-02]
 
 # full = tutti i campi, comprese le motivazioni scritte (decision_facts). Non usare light.
 versione: full
+
+# Casi e controlli (H5): casi per gruppo, fissati con "python src/casi/analisi_casi.py --numerosita"
+# sui primi 30 controlli validi. Si scrive qui, e con la data in docs/registro_modifiche.md,
+# prima di lanciare l'analisi dei casi. Vuoto = non ancora fissata.
+h5_numerosita_per_gruppo:

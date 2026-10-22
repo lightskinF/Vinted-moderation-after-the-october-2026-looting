@@ -6,7 +6,8 @@ raccolto con lo stesso questionario e negli stessi canali. Servono entrambi: sen
 non si può dire se una caratteristica aumenta il rischio di blocco.
 
 Il foglio si compila con le colonne di `src/casi/modello_casi.csv`. Il file compilato va in
-`data/casi/` (fuori da GitHub) e si tiene cifrato.
+`data/casi/casi.csv` (fuori da GitHub) e si tiene cifrato. Lo analizza `src/casi/analisi_casi.py`,
+con le regole fissate in `docs/registro_modifiche.md` ("Regole per H4 e H5").
 
 ## Tre tipi di falso positivo
 
