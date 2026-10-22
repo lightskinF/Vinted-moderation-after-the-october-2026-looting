@@ -21,10 +21,6 @@ Il codice che produce i risultati preregistrati ha queste impronte SHA-256, scri
 
 Se una di queste impronte cambia, il codice non è più quello registrato. Ogni modifica e ogni imprecisione nota dei file allegati è elencata, con data e motivo, in `docs/registro_modifiche.md`.
 
-## Uso dell'intelligenza artificiale
-
-Durante lo studio è stato usato un LLM (Claude, Anthropic) come supporto per scrivere e controllare il codice, redigere e impaginare i documenti e fare una verifica ulteriore sui calcoli. Domanda di ricerca, ipotesi, supposizioni e interpretazioni sono dell'autore.
-
 ## Struttura
 
 ```
