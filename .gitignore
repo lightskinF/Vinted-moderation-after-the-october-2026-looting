@@ -8,6 +8,8 @@ data/
 VintedScope guida a cosa abbiamo fatto.docx
 VintedScope_Inventario_installazioni_e_file.docx
 docs/lettere/
+docs/privacy.md
+docs/preregistrazione_testo_osf.txt
 
 # Ambiente Python
 .venv/

@@ -6,7 +6,7 @@ Non ricostruisce l'algoritmo e non stima il tasso di errore dell'intera piattafo
 
 - **Preregistrazione (OSF):** https://osf.io/4grmp (DOI 10.17605/OSF.IO/4GRMP), registrata il 22 ottobre 2026
 - **Autore:** Fabio Greco
-- **Stato:** ipotesi, finestre, distribuzione placebo e soglie fissate prima di guardare i dati dal 17 ottobre 2026 (con un'eccezione dichiarata nella sezione 2 della preregistrazione). L'analisi dell'evento parte dal 2 novembre 2026, quando i giorni 17-31 ottobre sono completi.
+- **Stato:** ipotesi, finestre, distribuzione placebo e soglie fissate prima di guardare i dati dal 17 ottobre 2026 (con un'eccezione dichiarata nella sezione 2 della preregistrazione). I dati dell'evento si scaricano dal 2 novembre 2026; l'analisi definitiva usa i file fino al 15 novembre e si fa dal 16 novembre (vedi `docs/registro_modifiche.md`).
 
 ## Cosa è stato registrato
 
@@ -19,7 +19,7 @@ Il codice che produce i risultati preregistrati ha queste impronte SHA-256, scri
 | `src/tdb/qualita.py` | `706fd910d5d43947cc47a1a6fd6ba958a8cf3f110683eaac22f4aaa4b4da5180` |
 | `src/comune.py` | `dcf41d95ef16417de70f454b7e0a1a558f9a6257b750145f9838d09faefc4a60` |
 
-Se una di queste impronte cambia, il codice non è più quello registrato. Ogni modifica e ogni imprecisione nota dei file allegati è elencata, con data e motivo, in `docs/registro_modifiche.md`.
+Se una di queste impronte cambia, il codice non è più quello registrato. Lo stato completo di tutti i file al momento della registrazione è il tag `prereg-v1`. Ogni modifica e ogni imprecisione nota dei file allegati è elencata, con data e motivo, in `docs/registro_modifiche.md`.
 
 ## Struttura
 
@@ -27,14 +27,14 @@ Se una di queste impronte cambia, il codice non è più quello registrato. Ogni 
 VintedScope/
 ├── README.md
 ├── LICENSE                 MIT (codice)
+├── LICENSE-DOCS.md         CC BY 4.0 (documenti e rapporti)
 ├── CITATION.cff            come citare il progetto
 ├── requirements.txt        librerie Python
 ├── config/progetto.yaml    date chiave, nome piattaforma, link OSF
 ├── docs/
-│   ├── preregistrazione.pdf / .md / _testo_osf.txt   piano registrato su OSF
+│   ├── preregistrazione.pdf / .md   piano registrato su OSF
 │   ├── registro_modifiche.md   modifiche e note successive alla registrazione
-│   ├── codebook_casi.md        variabili e regole per i casi documentati
-│   └── privacy.md              informativa per chi invia un caso (bozza)
+│   └── codebook_casi.md        variabili e regole per i casi documentati
 ├── src/
 │   ├── comune.py           funzioni condivise
 │   ├── tdb/                scarica_diretto.py, carica.py, qualita.py (database UE);
@@ -68,17 +68,17 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
 
 1. **Controllo dell'elenco dei file** (non scarica nulla):
    `python src/tdb/scarica_diretto.py --prova`
-2. **Download** dello storico usato per la preregistrazione (dal 1 luglio 2025 al 16 ottobre 2026) e, dal 2 novembre, della finestra dell'evento. Ogni giorno è uno ZIP di circa 10-12 MB; servono circa 15 GB liberi. Si può rilanciare dopo un'interruzione: salta i file già scaricati e integri (checksum SHA1).
+2. **Download** dello storico usato per la preregistrazione (dal 1 luglio 2025 al 16 ottobre 2026) e della finestra dell'evento. Ogni giorno è uno ZIP di circa 10-12 MB; servono circa 15 GB liberi. Si può rilanciare dopo un'interruzione: salta i file già scaricati e integri (checksum SHA1).
    `python src/tdb/scarica_diretto.py --da 2025-07-01 --a 2026-10-16`
-   `python src/tdb/scarica_diretto.py --da 2026-10-17 --a 2026-11-01`
+   `python src/tdb/scarica_diretto.py --da 2026-10-17 --a 2026-11-15`
 
-   Il 1 novembre serve perché alcune decisioni arrivano al database il giorno dopo: senza quel file la finestra 17-31 ottobre resterebbe incompleta.
+   I file fino al 15 novembre servono per due motivi: la validità di ogni giorno si giudica sulla mediana dei 29 giorni attorno (per il 31 ottobre, fino al 14 novembre), e alcune decisioni arrivano al database il giorno dopo. Dal 2 novembre i dati si possono già scaricare e guardare in forma descrittiva.
 
    Da dicembre, per il periodo "Dopo" (solo descrittivo) e per il controllo dei cambi strutturali fino al 30 novembre:
-   `python src/tdb/scarica_diretto.py --da 2026-11-02 --a 2026-12-01`
+   `python src/tdb/scarica_diretto.py --da 2026-11-16 --a 2026-12-01`
 3. **Caricamento e qualità**: converte ogni ZIP in Parquet senza estrarre i CSV e produce `reports/qualita_tdb.md` con i grafici.
    `python src/tdb/carica.py` e poi `python src/tdb/qualita.py`
-4. **Analisi preregistrata** (distribuzione placebo e, dal 2 novembre, l'evento):
+4. **Analisi preregistrata** (distribuzione placebo e, dal 16 novembre, l'evento):
    `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
@@ -101,4 +101,4 @@ Fino alla preregistrazione, in `config/progetto.yaml` c'era `modalita_cieca: tru
 
 ## Licenza e citazione
 
-Codice con licenza MIT (vedi `LICENSE`). Documenti e rapporti, come la preregistrazione su OSF, con licenza CC-BY 4.0. Per citare il progetto usa `CITATION.cff` o il DOI 10.17605/OSF.IO/4GRMP.
+Codice con licenza MIT (vedi `LICENSE`). Documenti e rapporti, come la preregistrazione su OSF, con licenza CC BY 4.0 (vedi `LICENSE-DOCS.md`). Per citare il progetto usa `CITATION.cff` o il DOI 10.17605/OSF.IO/4GRMP.
