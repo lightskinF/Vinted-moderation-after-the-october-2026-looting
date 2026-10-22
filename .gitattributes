@@ -1,0 +1,6 @@
+# Mantiene i file con a-capo LF su ogni sistema, cosi le impronte SHA-256 del codice registrato restano valide anche dopo un clone su Windows.
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+# I due rapporti allegati a OSF restano byte per byte come sono stati registrati (a-capo originali).
+reports/*.md -text

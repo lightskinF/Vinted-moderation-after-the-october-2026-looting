@@ -1,0 +1,19 @@
+# Dati: mai su GitHub (contengono dati personali dei casi e file pesanti)
+data/
+*.duckdb
+*.duckdb.wal
+
+# Documenti di lavoro personali (non fanno parte del progetto pubblico)
+*.docx
+VintedScope guida a cosa abbiamo fatto.docx
+VintedScope_Inventario_installazioni_e_file.docx
+docs/lettere/
+
+# Ambiente Python
+.venv/
+__pycache__/
+*.pyc
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,43 @@
+# VintedScope - impostazioni del progetto
+# Le date si scrivono AAAA-MM-GG.
+
+# Nome della piattaforma nel database UE (serve a filtrare le righe).
+piattaforma_filtro: vinted
+
+# Numero di Vinted UAB nell'elenco di download del sito UE (campo platform_id nell'indirizzo
+# della pagina quando scegli Vinted UAB). Lo usa scarica_diretto.py.
+piattaforma_id_sito: 40
+
+# Solo se usi dsa-tdb (scarica.py): il nome che dsa-tdb-cli usa per Vinted (opzione -p).
+piattaforma_cli: ""
+
+# Giorno dei saccheggi.
+data_evento: 2026-10-17
+
+# MODALITA' CIECA
+# Finche' e' true, gli script non scaricano e non caricano dati dal giorno
+# dell'evento in poi. Si mette a false SOLO dopo aver registrato le ipotesi
+# su OSF e aver incollato il link qui sotto.
+modalita_cieca: false
+preregistrazione_osf: "https://osf.io/4grmp"
+
+# Finestra di base registrata nella preregistrazione: dal giorno dopo l'ultimo cambio strutturale
+# (22 settembre 2026, giorno di transizione) al giorno prima dell'evento.
+base_da: 2026-09-23
+
+# Un giorno con meno di questa frazione della mediana dei 29 giorni attorno e' un'interruzione di invio
+# e si esclude (stessa regola per lo storico e per la finestra dell'evento).
+soglia_giorno_parziale: 0.6
+
+# Periodo da scaricare di default (in modalita' cieca la fine viene
+# comunque fermata al giorno prima dell'evento).
+download_da: 2026-08-01
+download_a: 2026-10-16
+
+# Giorni in cui il numero dichiarato dal sito UE non coincide con le righe contenute nel suo stesso file.
+# Verificato a mano contando le righe direttamente nello ZIP (22 ottobre 2026): il caricamento e' corretto,
+# e' il numero scritto nell'elenco del sito a essere diverso. Il rapporto li elenca ma non li conta come errori.
+giorni_sito_incoerenti: [2026-05-08, 2026-09-30, 2026-10-01, 2026-10-02]
+
+# full = tutti i campi (paese e motivazioni compresi). Non usare light.
+versione: full
