@@ -1,9 +1,9 @@
 # Codebook dei casi documentati
 
-Un **caso** e' un account Vinted che ha ricevuto un provvedimento e accetta di raccontarlo con prove.
-Un **controllo** e' un venditore privato attivo nello stesso periodo, senza provvedimenti,
+Un **caso** è un account Vinted che ha ricevuto un provvedimento e accetta di raccontarlo con prove.
+Un **controllo** è un venditore privato attivo nello stesso periodo, senza provvedimenti,
 raccolto con lo stesso questionario e negli stessi canali. Servono entrambi: senza controlli
-non si puo' dire se una caratteristica aumenta il rischio di blocco.
+non si può dire se una caratteristica aumenta il rischio di blocco.
 
 Il foglio si compila con le colonne di `src/casi/modello_casi.csv`. Il file compilato va in
 `data/casi/` (fuori da GitHub) e si tiene cifrato.
@@ -14,11 +14,11 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 
 | Tipo | Vinted sostiene che... | Prove che contraddicono il motivo | Prove che NON bastano |
 | --- | --- | --- | --- |
-| Merce rubata | l'articolo proviene da un furto | scontrino o ordine intestato, foto datate prima del 17/10, regalo documentato | numero di recensioni, anzianita' dell'account |
-| Attivita' commerciale | il privato rivende come un negozio | articoli del proprio guardaroba, regali, pochi doppioni, nessun acquisto all'ingrosso | uno scontrino: molti scontrini di articoli nuovi possono anzi sostenere il motivo |
-| Contraffazione | l'articolo e' falso | scontrino di un rivenditore autorizzato, certificato, codici verificabili | foto dell'etichetta da sola |
+| Merce rubata | l'articolo proviene da un furto | scontrino o ordine intestato, foto datate prima del 17/10, regalo documentato | numero di recensioni, anzianità dell'account |
+| Attività commerciale | il privato rivende come un negozio | articoli del proprio guardaroba, regali, pochi doppioni, nessun acquisto all'ingrosso | uno scontrino: molti scontrini di articoli nuovi possono anzi sostenere il motivo |
+| Contraffazione | l'articolo è falso | scontrino di un rivenditore autorizzato, certificato, codici verificabili | foto dell'etichetta da sola |
 
-**Quarto tipo: frode o controllo antifrode.** Se Vinted dichiara sospetta frode o truffa (pagamenti, identita', comportamento sull'account), il caso si tiene a parte e non si conta in nessuno dei tre tipi sopra: le prove che lo smentiscono sono diverse (storico delle transazioni, comunicazioni con gli acquirenti) e dopo i saccheggi i controlli di sicurezza possono essere diversi da quelli sulla vendita commerciale. Con pochi casi e' solo descrittivo.
+**Quarto tipo: frode o controllo antifrode.** Se Vinted dichiara sospetta frode o truffa (pagamenti, identità, comportamento sull'account), il caso si tiene a parte e non si conta in nessuno dei tre tipi sopra: le prove che lo smentiscono sono diverse (storico delle transazioni, comunicazioni con gli acquirenti) e dopo i saccheggi i controlli di sicurezza possono essere diversi da quelli sulla vendita commerciale. Con pochi casi è solo descrittivo.
 
 ## Variabili
 
@@ -26,7 +26,7 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | --- | --- | --- |
 | id_caso | Codice progressivo, mai il nome utente | C001... per i casi, K001... per i controlli |
 | gruppo | Caso o controllo | caso, controllo |
-| data_raccolta | Giorno in cui il questionario e' arrivato | AAAA-MM-GG |
+| data_raccolta | Giorno in cui il questionario è arrivato | AAAA-MM-GG |
 | canale_raccolta | Da dove arriva | modulo, reddit, gruppo_facebook, altroconsumo, altro |
 | consenso | Consenso all'informativa | si (se no: non si registra nulla) |
 | paese | Paese del venditore, dichiarato | IT, FR, altro_UE, extra_UE |
@@ -37,6 +37,7 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | quota_nuovi_cartellino | annunci_nuovi_cartellino / annunci_attivi | 0-1 |
 | articoli_duplicati | Annunci dello stesso articolo oltre il primo | numero |
 | pubblicati_ultimi_30_giorni | Annunci pubblicati nei 30 giorni precedenti | numero |
+| vendite_ultimi_3_mesi | Vendite concluse nei 3 mesi precedenti (criterio di inclusione: almeno 10) | numero |
 | categoria_prevalente | | abbigliamento, scarpe, borse_accessori, cosmetici, elettronica, altro |
 | fascia_marchi | | lusso, premium_streetwear, fast_fashion, misti |
 | data_provvedimento | Solo casi | AAAA-MM-GG |
@@ -51,7 +52,7 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 | esito_adr | | favorevole, sfavorevole, in_attesa |
 | richiesta_gdpr_utente | Richiesta ex art. 15 GDPR inviata dall'utente stesso | si, no |
 | risposta_gdpr | Sintesi della risposta ricevuta e condivisa dall'utente | testo |
-| prove_disponibili | | scontrino, ordine_online, regalo_documentato, foto_datate, certificato, nessuna (anche piu' di una) |
+| prove_disponibili | | scontrino, ordine_online, regalo_documentato, foto_datate, certificato, nessuna (anche più di una) |
 | pertinenza_prove | Asse B, vedi sotto | contraddicono_il_motivo, non_pertinenti, insufficienti |
 | esito_istituzionale | Asse A, vedi sotto | errore_riconosciuto, revocato_senza_spiegazione, confermato, pendente, mai_contestato |
 | classe_caso | Derivata dai due assi | vedi tabella sotto |
@@ -60,15 +61,15 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 
 ## Classificazione dei casi: due assi
 
-**Asse A, cosa e' successo dopo.**
+**Asse A, cosa è successo dopo.**
 - errore_riconosciuto: Vinted o un organismo extragiudiziale dicono esplicitamente che il provvedimento era sbagliato.
 - revocato_senza_spiegazione: il provvedimento viene tolto senza ammettere l'errore. Non equivale a un'ammissione.
-- confermato: il ricorso e' respinto. Non prova che il provvedimento fosse giusto.
+- confermato: il ricorso è respinto. Non prova che il provvedimento fosse giusto.
 - pendente, mai_contestato.
 
 **Asse B, cosa dicono le prove rispetto al motivo dichiarato** (tabella dei tre tipi qui sopra).
 - contraddicono_il_motivo: prove pertinenti a quel motivo che lo smentiscono.
-- non_pertinenti: prove che riguardano un altro motivo (es. scontrino contro un'accusa di attivita' commerciale).
+- non_pertinenti: prove che riguardano un altro motivo (es. scontrino contro un'accusa di attività commerciale).
 - insufficienti: motivo non dichiarato, o prove assenti.
 
 **Classe finale.**
@@ -83,10 +84,10 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 
 ## Codifica cieca
 
-**Caratteristiche degli annunci** (quota cartellino, duplicati, numero di annunci): le compila chi risponde al questionario, uguale per casi e controlli, quindi non c'e' codifica manuale. Se una persona le ricava da screenshot per verifica, lavora su file con codice casuale, senza gruppo (nei limiti del possibile).
+**Caratteristiche degli annunci** (quota cartellino, duplicati, numero di annunci): le compila chi risponde al questionario, uguale per casi e controlli, quindi non c'è codifica manuale. Se una persona le ricava da screenshot per verifica, lavora su file con codice casuale, senza gruppo (nei limiti del possibile).
 **Classificazione dell'errore** (assi A e B): riguarda solo i casi e richiede di conoscere motivazione e prove.
 
-**Due codificatori.** Il kappa di Cohen ha senso solo se due persone classificano gli stessi casi in modo indipendente. Se il secondo codificatore non c'e', non si dichiara alcun kappa: si scrive che la classificazione e' di una persona sola e si riportano i casi per classe senza percentuali complessive. Con due codificatori il kappa e' pesato se le classi sono ordinabili (asse A), semplice altrimenti.
+**Due codificatori.** Il kappa di Cohen ha senso solo se due persone classificano gli stessi casi in modo indipendente. Se il secondo codificatore non c'è, non si dichiara alcun kappa: si scrive che la classificazione è di una persona sola e si riportano i casi per classe senza percentuali complessive. Con due codificatori il kappa è pesato se le classi sono ordinabili (asse A), semplice altrimenti.
 
 1. Una persona prepara una copia dei casi senza date, paese, canale e gruppo.
 2. Due codificatori assegnano gli assi A e B ognuno per conto suo, seguendo solo questo codebook.
@@ -96,9 +97,9 @@ Il tipo dipende dal **motivo dichiarato** da Vinted, e ogni tipo si smentisce co
 ## Richieste GDPR e organismi extragiudiziali
 
 - Le richieste le presentano gli **utenti stessi** a Vinted, che poi possono condividere la risposta.
-- Si chiedono le "informazioni significative sulla logica utilizzata" (art. 15, par. 1, lett. h GDPR; Corte di giustizia UE, C-203/22, 27 febbraio 2025): procedura e principi applicati, non il codice ne' i pesi.
+- Si chiedono le "informazioni significative sulla logica utilizzata" (art. 15, par. 1, lett. h GDPR; Corte di giustizia UE, C-203/22, 27 febbraio 2025): procedura e principi applicati, non il codice né i pesi.
 - L'art. 22 GDPR riguarda solo decisioni **basate unicamente** su trattamenti automatizzati con effetti giuridici o analogamente significativi: non tutte le decisioni di moderazione rientrano.
-- ADR Center e' certificato da AGCOM come organismo extragiudiziale ai sensi dell'art. 21 DSA (delibera 501/24/CONS). Il suo sito non dice se pubblica decisioni o statistiche per piattaforma: si chiede ai partecipanti di condividere le decisioni ricevute, e ad ADR Center i dati aggregati su Vinted.
+- ADR Center è certificato da AGCOM come organismo extragiudiziale ai sensi dell'art. 21 DSA (delibera 501/24/CONS). Il suo sito non dice se pubblica decisioni o statistiche per piattaforma: si chiede ai partecipanti di condividere le decisioni ricevute, e ad ADR Center i dati aggregati su Vinted.
 
 ## Esclusioni
 

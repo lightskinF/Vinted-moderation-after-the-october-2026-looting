@@ -1,6 +1,6 @@
 # Registro delle modifiche e delle note alla preregistrazione
 
-Preregistrazione: https://osf.io/qu59p (OSF, modello Open-Ended, 22 ottobre 2026).
+Preregistrazione: https://osf.io/4grmp (OSF, modello Open-Ended, 22 ottobre 2026; DOI 10.17605/OSF.IO/4GRMP).
 
 Qui si elencano, con data e motivo, le modifiche al piano registrato e le imprecisioni note nei file allegati. Nessuna voce qui sotto cambia ipotesi, statistiche, soglie o regole di decisione.
 

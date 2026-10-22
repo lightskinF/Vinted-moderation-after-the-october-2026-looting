@@ -1,11 +1,12 @@
 cff-version: 1.2.0
 message: "Se usi questo lavoro, citalo così."
 title: "La moderazione di Vinted prima e dopo i saccheggi dell'ottobre 2026: un'analisi empirica delle dichiarazioni di motivazione e dei casi documentati"
-type: dataset
+type: software
 authors:
   - family-names: Greco
     given-names: Fabio
 doi: 10.17605/OSF.IO/4GRMP
 url: "https://osf.io/4grmp"
+repository-code: "https://github.com/lightskinF/Vinted-moderation-after-the-october-2026-looting"
 date-released: 2026-10-22
 license: MIT

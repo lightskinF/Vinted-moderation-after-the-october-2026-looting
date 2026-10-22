@@ -99,7 +99,7 @@ def main() -> None:
     esito = subprocess.run(comando)
     if esito.returncode != 0:
         sys.exit(f"dsa-tdb-cli e' terminato con errore ({esito.returncode}). "
-                 "Copia il messaggio qui sopra e mandamelo, oppure usa il piano B del README.")
+                 "Controlla il messaggio qui sopra, oppure usa il piano B del README.")
     print("Fatto. Ora esegui: python src/tdb/carica.py")
 
 
