@@ -83,6 +83,13 @@ CLASSI_LARGO = CLASSI_SEVERO | {"ripristino_senza_spiegazione", "errore_plausibi
 NUMERICHE = ["anzianita_mesi", "annunci_attivi", "annunci_nuovi_cartellino", "quota_nuovi_cartellino",
              "vendite_ultimi_3_mesi", "giorni_esito"]
 DATE = ["data_raccolta", "data_provvedimento", "data_ricorso", "data_esito"]
+# Risposte ripetute (registro, regola 13 del 23 ottobre 2026): stessa risposta a tutte queste domande del modulo,
+# arrivata entro 24 ore dalla precedente uguale. Si tiene solo la prima.
+RISPOSTE_MODULO = ["gruppo", "paese", "tipo_account", "categoria_prevalente", "anzianita_mesi", "annunci_attivi",
+                   "annunci_nuovi_cartellino", "vendite_ultimi_3_mesi", "periodo_provvedimento",
+                   "tipo_provvedimento", "motivo_dichiarato", "ricorso", "esito_ricorso", "giorni_esito", "adr",
+                   "esito_adr", "prove_disponibili"]
+INTERVALLO_RIPETUTE = pd.Timedelta(hours=24)
 
 
 # ---------------------------------------------------------------- lettura e controlli
@@ -100,6 +107,13 @@ def leggi(percorso: Path, solo_controlli: bool) -> pd.DataFrame:
     if solo_controlli:
         # Per la numerosita' si tengono solo i controlli: le righe dei casi si scartano qui, prima di qualsiasi calcolo.
         df = df[df["gruppo"] == "controllo"].copy()
+    rip = ripetute(df)
+    tolte = df.loc[rip, "id_caso"].tolist()
+    df = df[~rip].copy()
+    df.attrs["ripetute"] = tolte
+    if tolte:
+        print(f"Risposte ripetute escluse (uguali a una precedente entro 24 ore): {len(tolte)} "
+              f"({', '.join(breve(x, 12) for x in tolte)})")
     for c in NUMERICHE:
         df[c] = pd.to_numeric(df[c].str.replace(",", ".", regex=False), errors="coerce")
     for c in DATE:
@@ -110,6 +124,21 @@ def leggi(percorso: Path, solo_controlli: bool) -> pd.DataFrame:
         giorni = pd.to_datetime(df[c], format="%Y-%m-%d", errors="coerce")
         df[c] = [g.date() if pd.notna(g) else None for g in giorni]   # data mancante o scritta male = None
     return df
+
+
+def ripetute(df: pd.DataFrame) -> pd.Series:
+    """True per le risposte uguali in tutte le domande del modulo a una precedente arrivata da meno di 24 ore.
+    Le righe senza ora_risposta (inserite a mano) non si giudicano."""
+    ora = pd.to_datetime(df["ora_risposta"], format="%Y-%m-%d %H:%M:%S", errors="coerce")
+    chiave = df[RISPOSTE_MODULO].astype(str).agg("|".join, axis=1)
+    rip = pd.Series(False, index=df.index)
+    ultima: dict[str, pd.Timestamp] = {}
+    for i in ora.dropna().sort_values(kind="stable").index:
+        k = chiave[i]
+        if k in ultima and ora[i] - ultima[k] <= INTERVALLO_RIPETUTE:
+            rip[i] = True
+        ultima[k] = ora[i]
+    return rip
 
 
 def e_data(d) -> bool:
@@ -402,6 +431,9 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
           f"Soglia di esposizione: almeno il {SOGLIA_ESPOSTO:.0%} degli annunci \"nuovo con cartellino\". "
           "Regole: preregistrazione (sezione 7) e `docs/registro_modifiche.md`.\n\n"]
 
+    if tutte.attrs.get("ripetute"):
+        md.append(f"Risposte ripetute escluse (uguali a una precedente in tutte le domande, entro 24 ore): "
+                  f"{len(tutte.attrs['ripetute'])}.\n\n")
     if avvisi:
         md.append(f"## Da correggere nel foglio ({len(avvisi)})\n\n" + "".join(f"- {a}\n" for a in avvisi) + "\n")
 
@@ -415,7 +447,7 @@ def analisi(percorso: Path, n_registrato: int | None) -> None:
         ("Criterio largo", casi[casi["classe_caso"].isin(CLASSI_LARGO)]),
     ]
     md.append("## H4. Quota cartellino nei casi, dal 17 ottobre contro prima\n\n"
-              f"Casi UE con data del provvedimento e quota calcolabile. Mann-Whitney a una coda: verifica se le quote dei casi "
+              f"Casi UE con data o periodo del provvedimento e quota calcolabile. Mann-Whitney a una coda: verifica se le quote dei casi "
               f"dal 17 ottobre tendono a essere più alte (spostamento della distribuzione), non solo la mediana; "
               f"alfa {num(ALFA)}; solo descrittiva se un gruppo ha meno di {MIN_GRUPPO_H4} casi. Spostamento = stima di "
               "Hodges-Lehmann (mediana delle differenze tra tutte le coppie di casi), con intervallo al 95% a due code "

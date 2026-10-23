@@ -235,6 +235,7 @@ def modulo() -> None:
         f"  form.setConfirmationMessage({js(CONFERMA)});",
         "  form.setProgressBar(true);",
         "  form.setAllowResponseEdits(false);",
+        "  form.setShowLinkToRespondAgain(false);",
         "  var numero = FormApp.createTextValidation().setHelpText('Scrivi un numero intero, senza punti né lettere.')",
         "      .requireWholeNumber().build();",
         "  var pagine = {};",

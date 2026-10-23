@@ -40,7 +40,8 @@ VintedScope/
 │   ├── comune.py           funzioni condivise
 │   ├── tdb/                scarica_diretto.py, carica.py, qualita.py (database UE);
 │   │                       scarica.py è la vecchia versione con dsa-tdb, non usata
-│   ├── analisi/placebo.py  distribuzione placebo e test delle ipotesi
+│   ├── analisi/            placebo.py (distribuzione placebo e test delle ipotesi),
+│   │                       robustezza.py (prove con finestre di 7 e 21 giorni e base di 14)
 │   ├── sim/tasso_base.py   simulazione del tasso base
 │   └── casi/               modello_casi.csv (intestazioni del foglio dei casi),
 │                           questionario.py (domande, modulo Google, conversione delle risposte),
@@ -77,12 +78,16 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
 
    I file fino al 15 novembre servono per due motivi: la validità di ogni giorno si giudica sulla mediana dei 29 giorni attorno (per il 31 ottobre, fino al 14 novembre), e alcune decisioni arrivano al database il giorno dopo. Dal 2 novembre i dati si possono già scaricare e guardare in forma descrittiva.
 
+   Dal 22 novembre, per chiudere la prova di robustezza con la finestra di 21 giorni (17 ottobre - 6 novembre):
+   `python src/tdb/scarica_diretto.py --da 2026-11-16 --a 2026-11-21`
+
    Da dicembre, per il periodo "Dopo" (solo descrittivo) e per il controllo dei cambi strutturali fino al 30 novembre:
    `python src/tdb/scarica_diretto.py --da 2026-11-16 --a 2026-12-01`
 3. **Caricamento e qualità**: converte ogni ZIP in Parquet senza estrarre i CSV e produce `reports/qualita_tdb.md` con i grafici.
    `python src/tdb/carica.py` e poi `python src/tdb/qualita.py`
 4. **Analisi preregistrata** (distribuzione placebo e, dal 16 novembre, l'evento):
-   `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`
+   `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`;
+   prove di robustezza e giorni esclusi: `python src/analisi/robustezza.py --evento`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
 6. **Casi e controlli** (domande in `docs/questionario.md`, variabili in `docs/codebook_casi.md`):
