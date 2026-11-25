@@ -1,21 +1,22 @@
 # Qualità e stabilità dei dati Vinted nel DSA Transparency Database
 
-Generato il 2026-10-22. Modalità cieca: ATTIVA, dati fino al 2026-10-16 compreso. Dati caricati il 2026-10-22T11:32:35.
+Generato il 2026-11-25. Modalità cieca: SPENTA (preregistrazione: https://osf.io/4grmp). Dati caricati il 2026-11-25T17:35:37.
 
 ## Le domande di fattibilità
 
 | Domanda | Risposta | Esito |
 | --- | --- | --- |
-| Quante dichiarazioni ci sono? | 66.713.658 in 473 giorni, mediana 140.595 al giorno; 4 giorni con dati mancanti o parziali | OK |
-| Le righe caricate corrispondono a quelle del sito? | 66.713.658 contro 66.621.104 dichiarate, 0 giorni oltre l'1% da verificare, 4 già verificati | OK |
-| Quanto spesso cambia il modo di segnalare? | 14 cambi strutturali in 473 giorni (ultimo: 2026-09-22) | Da tenere in conto |
-| Quanto varia normalmente il totale in 14 giorni? | tra -13% e +14% nel 90% dei casi (lontano dai cambi strutturali) | OK |
-| Quale finestra di base usare? | 2026-09-23 - 2026-10-16, 22 giorni validi | OK |
-| I campi distinguono annunci/account, automazione, origine? | restrizioni account nel 32.6% delle dichiarazioni; decisione automatica vuota nel 0% | OK |
+| Quante dichiarazioni ci sono? | 74.271.141 in 512 giorni, mediana 142.800 al giorno; 6 giorni con dati mancanti o parziali | OK |
+| Le righe caricate corrispondono a quelle del sito? | 74.271.141 contro 74.341.956 dichiarate, 1 giorni oltre l'1% da verificare, 4 già verificati | Problema |
+| Quanto spesso cambia il modo di segnalare? | 15 cambi strutturali in 512 giorni (ultimo: 2026-10-30) | Da tenere in conto |
+| Quanto varia normalmente il totale in 14 giorni? | tra -12% e +17% nel 90% dei casi (lontano dai cambi strutturali) | OK |
+| Quale finestra di base usare? | 2026-09-23 - 2026-11-24, 59 giorni validi | OK |
+| I campi distinguono annunci/account, automazione, origine? | restrizioni account nel 33.0% delle dichiarazioni; decisione automatica vuota nel 0% | OK |
 | Le motivazioni distinguono i casi? | 100% delle dichiarazioni in 5 testi fissi; merce rubata citata in 0 dichiarazioni | Problema |
 
 ## Da guardare per primo
 
+- Il caricamento non corrisponde al sito in 1 giorni: controlla prima di interpretare qualunque serie.
 - La compilazione cambia nel tempo per: decision_account. Confronti prima/dopo su questi campi vanno trattati con cautela.
 - Estensione vuota o pari a tutta l'UE in oltre il 90% dei casi: nessun confronto Francia-Italia possibile con questi dati.
 - Motivazioni standard (100% delle dichiarazioni in 5 testi fissi): non distinguono merce rubata, contraffazione o vendita commerciale. È un dato rilevante per la trasparenza richiesta dall'art. 17 del DSA. Si analizza la composizione per categoria.
@@ -26,14 +27,14 @@ Si contano **dichiarazioni di motivazione**, non account né persone: uno stesso
 
 | Misura | Valore |
 | --- | --- |
-| Dichiarazioni | 66.713.658 |
+| Dichiarazioni | 74.271.141 |
 | Primo giorno (applicazione) | 2025-07-01 |
-| Ultimo giorno (applicazione) | 2026-10-16 |
-| Ultimo giorno di invio all'UE | 2026-10-16 |
-| Giorni nel periodo | 473 |
-| Giorni senza alcuna dichiarazione | 0 |
-| Giorni con dati mancanti o parziali (sotto metà dei giorni vicini) | 4 |
-| Dichiarazioni al giorno (mediana) | 140.595 |
+| Ultimo giorno (applicazione) | 2026-11-24 |
+| Ultimo giorno di invio all'UE | 2026-11-24 |
+| Giorni nel periodo | 512 |
+| Giorni senza alcuna dichiarazione | 1 |
+| Giorni con dati mancanti o parziali (sotto metà dei giorni vicini) | 6 |
+| Dichiarazioni al giorno (mediana) | 142.800 |
 | Righe con identificativo (uuid) ripetuto | 168 |
 
 Giorni con dati mancanti o parziali (vanno esclusi da ogni stima):
@@ -42,10 +43,12 @@ Giorni con dati mancanti o parziali (vanno esclusi da ogni stima):
 | --- | --- | --- |
 | 2025-07-02 | 65.385 | 110.598 |
 | 2026-08-22 | 5 | 148.007 |
-| 2026-10-03 | 40.113 | 160.118 |
+| 2026-10-03 | 40.113 | 159.401 |
 | 2026-10-04 | 90.343 | 160.835 |
+| 2026-11-08 | 0 | 189.540 |
+| 2026-11-09 | 68.436 | 192.111 |
 
-Le 168 righe ripetute sono lo 0.0003% del totale: trascurabili per i conteggi, ma vanno tolte nell'analisi finale.
+Le 168 righe ripetute sono lo 0.0002% del totale: trascurabili per i conteggi, ma vanno tolte nell'analisi finale.
 
 Mese per mese:
 
@@ -66,7 +69,8 @@ Mese per mese:
 | 2026-07 | 3.896.900 | 124.318 | 31 |
 | 2026-08 | 4.393.915 | 137.759 | 31 |
 | 2026-09 | 4.646.035 | 154.373 | 30 |
-| 2026-10 | 2.354.143 | 158.716 | 16 |
+| 2026-10 | 5.004.957 | 164.235 | 31 |
+| 2026-11 | 4.906.669 | 202.598 | 24 |
 
 ![Serie giornaliere](qualita_tdb_serie.png)
 
@@ -76,11 +80,11 @@ Per ogni giorno il sito dichiara quante dichiarazioni contiene il file. Qui si c
 
 | Misura | Valore |
 | --- | --- |
-| Giorni confrontati | 472 |
-| Dichiarate dal sito | 66.621.104 |
-| Caricate nel database | 66.713.658 |
-| Differenza (%) | 0.1 |
-| Giorni con differenza oltre l'1% (non ancora verificati) | 0 |
+| Giorni confrontati | 510 |
+| Dichiarate dal sito | 74.341.956 |
+| Caricate nel database | 74.271.141 |
+| Differenza (%) | -0.1 |
+| Giorni con differenza oltre l'1% (non ancora verificati) | 1 |
 | Giorni con differenza oltre l'1% (verificati: è il sito a non tornare) | 4 |
 
 Giorni in cui il sito dichiara un numero diverso dal contenuto del suo stesso file (verificato contando le righe direttamente nello ZIP: il caricamento è corretto):
@@ -92,13 +96,19 @@ Giorni in cui il sito dichiara un numero diverso dal contenuto del suo stesso fi
 | 2026-10-01 | 135.191 | 138.851 | 3.660 | 160.835 |
 | 2026-10-02 | 135.346 | 123.809 | -11.537 | 159.401 |
 
+Giorni più lontani (l'ultima colonna è la mediana dei giorni vicini caricati: serve a capire se è il sito o il caricamento a essere fuori linea):
+
+| Giorno | Sito | Caricate | Differenza | Vicini |
+| --- | --- | --- | --- | --- |
+| 2026-11-09 | 231.805 | 68.436 | -163.369 | 192.111 |
+
 ## 2. Ritardo tra decisione e invio all'UE
 
 Si misura sulle decisioni applicate almeno 30 giorni prima dell'ultimo invio.
 
 | Misura | Valore |
 | --- | --- |
-| Dichiarazioni usate per la misura | 62.080.268 |
+| Dichiarazioni usate per la misura | 68.240.623 |
 | Ritardo mediano (giorni) | 0 |
 | 90% inviate entro (giorni) | 0 |
 | 99% inviate entro (giorni) | 0 |
@@ -128,8 +138,9 @@ Per ogni giorno si confronta la media dei 14 giorni validi precedenti con quella
 | 12 | 2026-06-05 | 2 | Sospensioni di account: 132 → 44.439; Quota con restrizione sull'account (%): 28.2 → 64.8 |
 | 13 | 2026-06-22 | 1 | Chiusure definitive di account: 43.114 → 28.307 |
 | 14 | 2026-09-22 | 4 | Quota con restrizione sull'account (%): 57.8 → 25.9; Quota da iniziativa propria (%): 99.2 → 60.3; Quota da altra segnalazione (%): 0.0 → 38.8; Sospensioni di account: 46.873 → 963 |
+| 15 | 2026-10-30 | 6 | Chiusure definitive di account: 37.541 → 104.800; Sospensioni di account: 994 → 46; Quota con restrizione sull'account (%): 23.9 → 44.2; Quota con rilevamento automatico (%): 59.5 → 69.8; Quota con decisione tutta automatica (%): 33.3 → 53.1; Quota Truffe e frodi (%): 21.8 → 42.6 |
 
-Eventi trovati: **14** in 473 giorni (circa 10.8 all'anno). Ogni confronto prima/dopo l'evento del 17 ottobre deve tenere conto di questa frequenza: un cambio di quella misura capita anche senza eventi esterni.
+Eventi trovati: **15** in 512 giorni (circa 10.7 all'anno). Ogni confronto prima/dopo l'evento del 17 ottobre deve tenere conto di questa frequenza: un cambio di quella misura capita anche senza eventi esterni.
 
 ![Categorie per settimana](qualita_tdb_categorie.png)
 
@@ -141,38 +152,38 @@ Per ogni giorno valido si confronta la media dei 14 giorni successivi con quella
 
 | Metrica | Giorni | Confronti | 5° percentile | Mediana | 95° percentile |
 | --- | --- | --- | --- | --- | --- |
-| Dichiarazioni al giorno | tutti | 442 | -13% | +2% | +14% |
-| Dichiarazioni al giorno | lontani dai cambi | 442 | -13% | +2% | +14% |
-| Sospensioni di account | tutti | 442 | -79% | -6% | +132% |
-| Sospensioni di account | lontani dai cambi | 238 | -23% | -3% | +21% |
-| Chiusure definitive di account | tutti | 442 | -31% | -0% | +40% |
-| Chiusure definitive di account | lontani dai cambi | 369 | -20% | +0% | +31% |
-| Quota con restrizione sull'account (%) | tutti | 442 | -8.7 pt | -0.5 pt | +8.7 pt |
-| Quota con restrizione sull'account (%) | lontani dai cambi | 392 | -6.4 pt | -0.5 pt | +5.1 pt |
-| Quota Altre violazioni delle regole (%) | tutti | 442 | -5.6 pt | -0.7 pt | +8.4 pt |
-| Quota Altre violazioni delle regole (%) | lontani dai cambi | 415 | -5.7 pt | -1.0 pt | +5.4 pt |
-| Quota Proprietà intellettuale (%) | tutti | 442 | -3.7 pt | +0.2 pt | +4.7 pt |
-| Quota Proprietà intellettuale (%) | lontani dai cambi | 442 | -3.7 pt | +0.2 pt | +4.7 pt |
-| Quota Truffe e frodi (%) | tutti | 442 | -6.1 pt | -0.4 pt | +5.2 pt |
-| Quota Truffe e frodi (%) | lontani dai cambi | 442 | -6.1 pt | -0.4 pt | +5.2 pt |
-| Quota Prodotti non sicuri o vietati (%) | tutti | 442 | -1.7 pt | +0.3 pt | +2.1 pt |
-| Quota Prodotti non sicuri o vietati (%) | lontani dai cambi | 442 | -1.7 pt | +0.3 pt | +2.1 pt |
+| Dichiarazioni al giorno | tutti | 479 | -12% | +2% | +17% |
+| Dichiarazioni al giorno | lontani dai cambi | 479 | -12% | +2% | +17% |
+| Sospensioni di account | tutti | 479 | -89% | -7% | +109% |
+| Sospensioni di account | lontani dai cambi | 247 | -23% | -2% | +20% |
+| Chiusure definitive di account | tutti | 479 | -30% | +0% | +78% |
+| Chiusure definitive di account | lontani dai cambi | 382 | -20% | +0% | +31% |
+| Quota con restrizione sull'account (%) | tutti | 479 | -8.5 pt | -0.4 pt | +14.9 pt |
+| Quota con restrizione sull'account (%) | lontani dai cambi | 402 | -6.3 pt | -0.6 pt | +5.1 pt |
+| Quota Altre violazioni delle regole (%) | tutti | 479 | -5.8 pt | -0.7 pt | +8.0 pt |
+| Quota Altre violazioni delle regole (%) | lontani dai cambi | 452 | -5.8 pt | -0.9 pt | +5.1 pt |
+| Quota Truffe e frodi (%) | tutti | 479 | -5.9 pt | -0.3 pt | +7.3 pt |
+| Quota Truffe e frodi (%) | lontani dai cambi | 456 | -6.0 pt | -0.4 pt | +5.1 pt |
+| Quota Proprietà intellettuale (%) | tutti | 479 | -4.4 pt | -0.0 pt | +4.6 pt |
+| Quota Proprietà intellettuale (%) | lontani dai cambi | 479 | -4.4 pt | -0.0 pt | +4.6 pt |
+| Quota Prodotti non sicuri o vietati (%) | tutti | 479 | -1.9 pt | +0.3 pt | +2.3 pt |
+| Quota Prodotti non sicuri o vietati (%) | lontani dai cambi | 479 | -1.9 pt | +0.3 pt | +2.3 pt |
 
 Effetto del giorno della settimana (dichiarazioni rispetto alla media della settimana):
 
 | Giorno | Scarto |
 | --- | --- |
-| lunedì | +3% |
+| lunedì | +4% |
 | martedì | +2% |
-| mercoledì | +1% |
-| giovedì | +0% |
-| venerdì | -3% |
-| sabato | -6% |
-| domenica | +3% |
+| mercoledì | +0% |
+| giovedì | -0% |
+| venerdì | -4% |
+| sabato | -5% |
+| domenica | +4% |
 
 ## 5. Finestra di base prima dell'evento
 
-Finestra registrata (config `base_da`): dal **2026-09-23** al **2026-10-16**, esclusi i giorni con dati mancanti o parziali: **22 giorni validi**. Il rilevatore automatico colloca l'ultimo cambio strutturale al 2026-09-22; quel giorno è di transizione (il cambio avviene durante la giornata), per questo la base parte dal giorno dopo.
+Finestra registrata (config `base_da`): dal **2026-09-23** al **2026-11-24**, esclusi i giorni con dati mancanti o parziali: **59 giorni validi**. Il rilevatore automatico colloca l'ultimo cambio strutturale al 2026-10-30; quel giorno è di transizione (il cambio avviene durante la giornata), per questo la base parte dal giorno dopo.
 Una finestra che attraversa un cambio strutturale mescolerebbe due modi diversi di segnalare e falserebbe il confronto.
 
 ## 6. Campi vuoti
@@ -190,7 +201,7 @@ Alcuni campi sono vuoti per costruzione (per esempio la decisione sull'account q
 | decision_visibility | 0.1 |
 | decision_monetary | 100.0 |
 | decision_provision | 100.0 |
-| decision_account | 67.4 |
+| decision_account | 67.0 |
 | account_type | 100.0 |
 | decision_ground | 0.0 |
 | category | 0.0 |
@@ -206,7 +217,7 @@ Alcuni campi sono vuoti per costruzione (per esempio la decisione sull'account q
 | incompatible_content_explanation | 0.0 |
 | illegal_content_legal_ground | 100.0 |
 | illegal_content_explanation | 100.0 |
-| end_date_account_restriction | 91.8 |
+| end_date_account_restriction | 92.6 |
 | end_date_visibility_restriction | 100.0 |
 | file_giorno | 0.0 |
 
@@ -229,7 +240,8 @@ Campi chiave vuoti, mese per mese (%). Un salto improvviso indica un cambio nel 
 | 2026-07 | 3.896.900 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 38.7 |
 | 2026-08 | 4.393.915 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 38.7 |
 | 2026-09 | 4.646.035 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 51.9 |
-| 2026-10 | 2.354.143 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 74.3 |
+| 2026-10 | 5.004.957 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 73.6 |
+| 2026-11 | 4.906.669 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 58.6 |
 
 ## 7. Come Vinted compila i campi
 
@@ -237,87 +249,87 @@ Campi chiave vuoti, mese per mese (%). Un salto improvviso indica un cambio nel 
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| STATEMENT_CATEGORY_OTHER_VIOLATION_TC | 28.312.508 | 42.4 |
-| STATEMENT_CATEGORY_INTELLECTUAL_PROPERTY_INFRINGEMENTS | 15.590.543 | 23.4 |
-| STATEMENT_CATEGORY_SCAMS_AND_FRAUD | 14.969.975 | 22.4 |
-| STATEMENT_CATEGORY_UNSAFE_AND_PROHIBITED_PRODUCTS | 7.813.047 | 11.7 |
-| STATEMENT_CATEGORY_ILLEGAL_OR_HARMFUL_SPEECH | 27.585 | 0.0 |
+| STATEMENT_CATEGORY_OTHER_VIOLATION_TC | 30.630.142 | 41.2 |
+| STATEMENT_CATEGORY_SCAMS_AND_FRAUD | 17.592.062 | 23.7 |
+| STATEMENT_CATEGORY_INTELLECTUAL_PROPERTY_INFRINGEMENTS | 17.177.796 | 23.1 |
+| STATEMENT_CATEGORY_UNSAFE_AND_PROHIBITED_PRODUCTS | 8.841.958 | 11.9 |
+| STATEMENT_CATEGORY_ILLEGAL_OR_HARMFUL_SPEECH | 29.183 | 0.0 |
 
 ### decision_ground
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| DECISION_GROUND_INCOMPATIBLE_CONTENT | 66.713.658 | 100.0 |
+| DECISION_GROUND_INCOMPATIBLE_CONTENT | 74.271.141 | 100.0 |
 
 ### decision_account
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| (vuoto) | 44.956.948 | 67.4 |
-| DECISION_ACCOUNT_TERMINATED | 16.311.462 | 24.4 |
-| DECISION_ACCOUNT_SUSPENDED | 5.445.248 | 8.2 |
+| (vuoto) | 49.764.029 | 67.0 |
+| DECISION_ACCOUNT_TERMINATED | 19.046.748 | 25.6 |
+| DECISION_ACCOUNT_SUSPENDED | 5.460.364 | 7.4 |
 
 ### decision_provision
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| (vuoto) | 66.713.658 | 100.0 |
+| (vuoto) | 74.271.141 | 100.0 |
 
 ### decision_monetary
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| (vuoto) | 66.713.658 | 100.0 |
+| (vuoto) | 74.271.141 | 100.0 |
 
 ### account_type
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| (vuoto) | 66.713.658 | 100.0 |
+| (vuoto) | 74.271.141 | 100.0 |
 
 ### automated_detection
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| True | 36.308.711 | 54.4 |
-| False | 30.404.947 | 45.6 |
+| True | 41.240.336 | 55.5 |
+| False | 33.030.805 | 44.5 |
 
 ### automated_decision
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| AUTOMATED_DECISION_NOT_AUTOMATED | 44.130.739 | 66.1 |
-| AUTOMATED_DECISION_FULLY | 22.582.919 | 33.9 |
+| AUTOMATED_DECISION_NOT_AUTOMATED | 48.351.746 | 65.1 |
+| AUTOMATED_DECISION_FULLY | 25.919.395 | 34.9 |
 
 ### source_type
 
 | Valore | Dichiarazioni | Quota (%) |
 | --- | --- | --- |
-| SOURCE_VOLUNTARY | 63.597.426 | 95.3 |
-| SOURCE_TYPE_OTHER_NOTIFICATION | 2.544.451 | 3.8 |
-| SOURCE_ARTICLE_16 | 571.781 | 0.9 |
+| SOURCE_VOLUNTARY | 68.685.055 | 92.5 |
+| SOURCE_TYPE_OTHER_NOTIFICATION | 4.970.380 | 6.7 |
+| SOURCE_ARTICLE_16 | 615.706 | 0.8 |
 
 ### decision_visibility (una dichiarazione può avere più valori)
 
 | Valore | Dichiarazioni | Quota sul totale (%) |
 | --- | --- | --- |
-| DECISION_VISIBILITY_CONTENT_REMOVED | 59.755.399 | 89.6 |
-| DECISION_VISIBILITY_CONTENT_DISABLED | 6.900.445 | 10.3 |
+| DECISION_VISIBILITY_CONTENT_REMOVED | 66.798.184 | 89.9 |
+| DECISION_VISIBILITY_CONTENT_DISABLED | 7.415.143 | 10.0 |
 | (vuoto) | 57.814 | 0.1 |
 
 ### content_type (una dichiarazione può avere più valori)
 
 | Valore | Dichiarazioni | Quota sul totale (%) |
 | --- | --- | --- |
-| CONTENT_TYPE_PRODUCT | 66.627.701 | 99.9 |
-| CONTENT_TYPE_TEXT | 74.750 | 0.1 |
-| CONTENT_TYPE_IMAGE | 11.207 | 0.0 |
+| CONTENT_TYPE_PRODUCT | 72.904.715 | 98.2 |
+| CONTENT_TYPE_TEXT | 1.354.295 | 1.8 |
+| CONTENT_TYPE_IMAGE | 12.131 | 0.0 |
 
 ### category_specification (una dichiarazione può avere più valori)
 
 | Valore | Dichiarazioni | Quota sul totale (%) |
 | --- | --- | --- |
-| (vuoto) | 66.713.658 | 100.0 |
+| (vuoto) | 74.271.141 | 100.0 |
 
 ### Rilevamento automatico e decisione automatica
 
@@ -325,10 +337,10 @@ Sono due cose diverse: un sistema può segnalare e una persona decidere.
 
 | Rilevamento automatico | Decisione automatica | Dichiarazioni | Quota (%) |
 | --- | --- | --- | --- |
-| False | AUTOMATED_DECISION_NOT_AUTOMATED | 27.942.303 | 41.9 |
-| True | AUTOMATED_DECISION_FULLY | 20.120.275 | 30.2 |
-| True | AUTOMATED_DECISION_NOT_AUTOMATED | 16.188.436 | 24.3 |
-| False | AUTOMATED_DECISION_FULLY | 2.462.644 | 3.7 |
+| False | AUTOMATED_DECISION_NOT_AUTOMATED | 30.392.698 | 40.9 |
+| True | AUTOMATED_DECISION_FULLY | 23.281.288 | 31.3 |
+| True | AUTOMATED_DECISION_NOT_AUTOMATED | 17.959.048 | 24.2 |
+| False | AUTOMATED_DECISION_FULLY | 2.638.107 | 3.6 |
 
 ## 8. Estensione territoriale delle restrizioni
 
@@ -349,11 +361,11 @@ Testi diversi: 5. Coprono il 100.0% delle dichiarazioni.
 
 | Inizio del testo | Dichiarazioni | Quota (%) | Categoria prevalente |
 | --- | --- | --- | --- |
-| Moderation revealed content that violates our catalog rules. | 28.312.508 | 42.4 | Altre violazioni delle regole (100%) |
-| Moderation revealed content that infringes on intellectual property. | 15.590.543 | 23.4 | Proprietà intellettuale (100%) |
-| Moderation revealed content containing scams and/or fraud. | 14.969.975 | 22.4 | Truffe e frodi (100%) |
-| Moderation revealed unsafe and/or illegal products. | 7.813.047 | 11.7 | Prodotti non sicuri o vietati (100%) |
-| Moderation revealed content containing illegal or harmful speech. | 27.585 | 0.0 | Discorsi illegali o dannosi (100%) |
+| Moderation revealed content that violates our catalog rules. | 30.630.142 | 41.2 | Altre violazioni delle regole (100%) |
+| Moderation revealed content containing scams and/or fraud. | 17.592.062 | 23.7 | Truffe e frodi (100%) |
+| Moderation revealed content that infringes on intellectual property. | 17.177.796 | 23.1 | Proprietà intellettuale (100%) |
+| Moderation revealed unsafe and/or illegal products. | 8.841.958 | 11.9 | Prodotti non sicuri o vietati (100%) |
+| Moderation revealed content containing illegal or harmful speech. | 29.183 | 0.0 | Discorsi illegali o dannosi (100%) |
 
 Parole chiave nei testi (inglese, francese, italiano):
 
