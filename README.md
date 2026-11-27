@@ -41,7 +41,8 @@ VintedScope/
 │   ├── tdb/                scarica_diretto.py, carica.py, qualita.py (database UE);
 │   │                       scarica.py è la vecchia versione con dsa-tdb, non usata
 │   ├── analisi/            placebo.py (distribuzione placebo e test delle ipotesi),
-│   │                       robustezza.py (prove con finestre di 7 e 21 giorni e base di 14)
+│   │                       robustezza.py (prove con finestre di 7 e 21 giorni e base di 14),
+│   │                       serie_evento.py (tabella giornaliera descrittiva attorno all'evento)
 │   ├── sim/tasso_base.py   simulazione del tasso base
 │   └── casi/               modello_casi.csv (intestazioni del foglio dei casi),
 │                           questionario.py (domande, modulo Google, conversione delle risposte),
@@ -87,7 +88,8 @@ Il pacchetto ufficiale `dsa-tdb` non serve (richiede PySpark e Java): i file si 
    `python src/tdb/carica.py` e poi `python src/tdb/qualita.py`
 4. **Analisi preregistrata** (distribuzione placebo e, dal 16 novembre, l'evento):
    `python src/analisi/placebo.py` e poi `python src/analisi/placebo.py --evento`;
-   prove di robustezza e giorni esclusi: `python src/analisi/robustezza.py --evento`
+   prove di robustezza e giorni esclusi: `python src/analisi/robustezza.py --evento`;
+   tabella giornaliera descrittiva (non è un test): `python src/analisi/serie_evento.py`
 5. **Sensibilità del tasso base** (scenari ipotetici, non stime su Vinted):
    `python src/sim/tasso_base.py`
 6. **Casi e controlli** (domande in `docs/questionario.md`, variabili in `docs/codebook_casi.md`):

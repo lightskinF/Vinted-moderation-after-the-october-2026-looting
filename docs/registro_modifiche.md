@@ -2,7 +2,7 @@
 
 Preregistrazione: https://osf.io/4grmp (OSF, modello Open-Ended, 22 ottobre 2026; DOI 10.17605/OSF.IO/4GRMP).
 
-Qui si elencano, con data e motivo, le deviazioni dal piano registrato, le precisazioni su come si applica e le imprecisioni note nei file allegati. Tutte le voci sono scritte prima di scaricare o analizzare i dati dal 17 ottobre 2026. Nessuna cambia ipotesi, soglie o regole di decisione già registrate. Le regole per H4 e H5 sono specificazioni analitiche aggiuntive, fissate prima di raccogliere risposte: completano il modello di H5 e la misura dell'effetto di H4, che la preregistrazione lasciava aperti.
+Qui si elencano, con data e motivo, le deviazioni dal piano registrato, le precisazioni su come si applica e le imprecisioni note nei file allegati. Tutte le voci sono scritte prima di scaricare o analizzare i dati dal 17 ottobre 2026, tranne quelle dell'ultima sezione ("Note scritte dopo l'analisi"), che lo dichiarano. Nessuna cambia ipotesi, soglie o regole di decisione già registrate. Le regole per H4 e H5 sono specificazioni analitiche aggiuntive, fissate prima di raccogliere risposte: completano il modello di H5 e la misura dell'effetto di H4, che la preregistrazione lasciava aperti.
 
 Lo stato completo del codice al momento della registrazione è il tag `prereg-v1` di questo repository. I tre file con impronta SHA-256 nella preregistrazione (`placebo.py`, `qualita.py`, `comune.py`) non sono cambiati. Dopo il tag sono cambiati solo commenti, messaggi a schermo, la stima dello spazio su disco e le date di download predefinite in `config/progetto.yaml`, `carica.py`, `scarica_diretto.py`, `scarica.py` e `tasso_base.py`, si sono aggiunte due colonne al modello del foglio dei casi (`vendite_ultimi_3_mesi`, `ora_risposta`) gli script dei casi (`src/casi/analisi_casi.py`, `src/casi/questionario.py`) e lo script delle prove di robustezza (`src/analisi/robustezza.py`); la storia dei commit mostra ogni riga modificata.
 
@@ -56,3 +56,7 @@ Sono imprecisioni di testo nella preregistrazione e nei file generati dal codice
 | `qualita_tdb.md` | "Da guardare per primo" | "Estensione vuota o pari a tutta l'UE in oltre il 90% dei casi" | Il valore misurato è 100% (sezione 8 del rapporto) |
 | `qualita_tdb.md`, `placebo.md` | Tutte le tabelle | Decimali con il punto (32.6%, +14.5%) e migliaia con il punto (66.713.658) | Stessi valori della preregistrazione, che usa la virgola per i decimali (+14,5%) |
 | `src/analisi/placebo.py` | Commento in cima al file | Rimanda alle "sezioni 6 e 8" | Nella versione registrata quei contenuti sono nelle sezioni 4, 5 e 6. Solo un commento: non tocca i calcoli |
+
+## Note scritte dopo l'analisi di H1-H3
+
+1. **Serie giornaliera attorno all'evento** (27 novembre 2026, dopo aver visto i risultati). `src/analisi/serie_evento.py` scrive `reports/serie_evento.md`: per ogni giorno dal 23 settembre 2026, le restrizioni account e quante dichiarano rilevamento automatico, decisione tutta automatica e altra segnalazione, con le quote. È solo descrittiva e non è un test. I periodi del riepilogo (per esempio 31 ottobre - 5 novembre e 19-23 novembre) sono scelti guardando i dati, per descrivere il salto del 30 ottobre e il rientro successivo. I verdetti su H1-H3 restano quelli della finestra registrata (`reports/placebo.md`).
